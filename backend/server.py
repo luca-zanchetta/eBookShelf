@@ -36,7 +36,7 @@ def register():
     username = data['username']
     name = data['name']
     surname = data['surname']
-    balance = 0
+    balance = 0.0
     password = data['password']
     
     user_coll = db['user']
@@ -55,6 +55,32 @@ def register():
     return jsonify({'message':'ERROR: User has not been registered.', 'status':500})
 
 
+@app.route('/login', methods=['POST'])
+def login():
+    pass
+
+
+@app.route('/addMoney', methods=['POST'])
+def add_money():
+    data = request.get_json()
+    
+    username = data['username']
+    amount = data['amount']
+    
+    if amount < 0:
+        return jsonify({'message':'ERROR: The amount cannot be less than zero!', 'status':400})
+    
+    user_coll = db['user']
+    target_user = user_coll.find_one({'username':username})    
+    balance = float(target_user['balance']) + float(amount)
+    
+    query = { 'username': username }
+    newvalues = { '$set': { 'balance': balance } }
+    user_coll.update_one(query, newvalues)
+    
+    return jsonify({'message':'Balance successfully updated!', 'status':200})
+    
+    
 
 #############################################################################################
 
