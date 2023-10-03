@@ -20,13 +20,28 @@ function Navbar({OnNavigatorClick}) {
             <hr />
             <div className='ToggleMenu'>
                 <div className='ToggleEntry'>
-                    <input type='radio' id="store"></input>
+                    <input type='radio' id="store" name="menu"></input>
                     <div className='ToggleIcon'>
                         <img src={store}></img>
                     </div>
                     <label for="store">Book store</label>
                 </div>
+                <div className='ToggleEntry'>
+                    <input type='radio' id="library" name="menu"></input>
+                    <div className='ToggleIcon'>
+                        <img src={store}></img>
+                    </div>
+                    <label for="library">Book store</label>
+                </div>
+                <div className='ToggleEntry'>
+                    <input type='radio' id="dsds" name="menu"></input>
+                    <div className='ToggleIcon'>
+                        <img src={store}></img>
+                    </div>
+                    <label for="dsds">Book store</label>
+                </div>
             </div>
+            <hr />
         </div>
     );
 }
