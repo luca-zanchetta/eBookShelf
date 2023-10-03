@@ -57,7 +57,23 @@ def register():
 
 @app.route('/login', methods=['POST'])
 def login():
-    pass
+    data = request.get_json()
+
+    username = data['username']
+    password = data['password']
+    user_coll = db['user']
+
+    # Check the user
+    query = {'username':username}
+    user = user_coll.find_one(query)
+
+    if user is None:
+        return jsonify({'message':'The user is not registered!', 'status':404})
+    
+    if user['password'] == password:
+        return jsonify({'message':'Login successful!', 'status':200})
+    
+    return jsonify({'message':'Wrong username and/or password. Try again!', 'status':400})
 
 
 @app.route('/addMoney', methods=['POST'])
