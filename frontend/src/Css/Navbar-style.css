@@ -1,0 +1,95 @@
+.Container {
+    height: 100%;
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    padding: 2%;
+    align-content: center;
+}
+
+hr {
+    display: flex;
+    color: grey;
+    width: 80%;
+    border-radius: 50%;
+}
+
+
+.ProfileContainer {
+    display: flex;
+    width: 100%;
+    padding: 2%;
+    align-items: center;
+    flex-direction: column;
+}
+
+.ProfileContainer > img {
+    aspect-ratio: 1 / 1;
+    max-width: 20px;
+}
+
+.ProfileContainer > h2 {
+    margin: 1%;
+}
+
+.ProfileContainer > h4 {
+    margin: 1%;
+    font-size: large;
+    color: grey;
+}
+
+.ToggleMenu {
+    position: relative;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ToggleEntry {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    padding: 1%;
+    justify-content: flex-start;
+    align-items: center;
+    height: fit-content;
+    height: max-content;
+}
+
+.ToggleEntry> input[type="radio"] {
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.ToggleIcon {
+    display: flex;
+    padding: 1%;
+    border-radius: 10px;
+    background-color: grey;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    margin-right: 10%;
+}
+
+.ToggleIcon > img {
+    display: flex;
+    aspect-ratio: 1 / 1;
+    max-width: 20px;
+}
+
+.ToggleEntry > label {
+    display: flex;
+    font-size: large;
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+    white-space: nowrap;
+}
+
+
+
