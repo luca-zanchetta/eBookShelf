@@ -41,7 +41,6 @@ hr {
 
 .ToggleMenu {
     padding: 5% 15% 5% 15%;
-    height: 30%;
     position: relative;
     display: flex;
     width: -webkit-fill-available;
@@ -64,6 +63,7 @@ hr {
 }
 
 .ToggleEntry > label {
+    color: rgb(147,147,153);
     display: flex;
     font-size: large;
     font-weight: bold;
@@ -76,7 +76,7 @@ hr {
     display: flex;
     padding: 1%;
     border-radius: 10px;
-    background-color: grey;
+    background-color: #f4f4f5;
     align-items: center;
     justify-content: center;
     height: 100%;
@@ -100,9 +100,23 @@ hr {
     z-index: 3;
 }
 
-.ToggleEntry > input[type="radio"]:checked+label+.ToggleIcon {
-    background-color: blueviolet;
-    color: blueviolet;
+.ToggleEntry > input[type="button"] {
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    z-index: 3;
+}
+
+.ToggleEntry > input[type="radio"]:checked+.ToggleIcon+label { 
+    color: rgb(120,70,180);
+}
+.ToggleEntry > input[type="radio"]:checked+.ToggleIcon { 
+    background-color: rgb(120,70,180);
+}
+.ToggleEntry > input[type="radio"]:checked+.ToggleIcon>img { 
+    filter: invert(100%);
 }
 
 

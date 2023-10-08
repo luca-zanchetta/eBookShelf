@@ -1,0 +1,94 @@
+.RightContainer {
+    height: 100%;
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(244,244,245);
+}
+
+h2 {
+    padding: 0;
+    margin: 1%;
+    display: flex;
+}
+
+.BookInfo {
+    margin: 5% 0% 5% 0%;
+    position: relative;
+    display: flex;
+    align-content: center;
+    width: -webkit-fill-available;
+    flex-direction: column;
+}
+
+.RightContainer > img {
+    position: relative;
+    display: flex;
+    max-width: 70%;
+    margin: 5% 0% 5% 0%;
+}
+
+.BookInfo > h3 {
+    margin: 1%;
+}
+
+.BookInfo > h5 {
+    margin: 1%;
+    font-weight: normal;
+}
+
+.BookRecap {
+    margin: 5% 0% 5% 0%;
+    display: flex;
+    flex-direction: row;
+    padding: 0% 10% 0% 10%;
+    align-items: center;
+}
+.BookRecap >hr {
+    
+    width: 1px;
+    height: 100%;
+
+}
+
+.RecapEntry {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.RecapEntry > h4 {
+    display: flex;
+    margin: 1%;
+}
+
+.RecapEntry > h5 {
+    display: flex;
+    margin: 1%;
+    font-weight: normal;
+}
+
+.RightContainer > input[type="button"] {
+    background-color: rgb(120,70,180);
+    width: 60%;
+    padding: 5%;
+    border-radius: 80px;
+    border: none;
+    color: white;
+    margin-bottom: 10%;
+    cursor: pointer;
+}
+
+.RightContainer > input[type="button"]:hover {
+    background-color: rgb(149, 102, 208);
+
+}
+
+.BookContent {
+    width: 70%;
+    height: -webkit-fill-available;
+    display: flex;
+    text-overflow: clip;
+    overflow-y: auto;
+}
