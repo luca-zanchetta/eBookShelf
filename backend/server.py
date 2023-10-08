@@ -87,16 +87,74 @@ def add_money():
         return jsonify({'message':'ERROR: The amount cannot be less than zero!', 'status':400})
     
     user_coll = db['user']
-    target_user = user_coll.find_one({'username':username})    
-    balance = float(target_user['balance']) + float(amount)
+    target_user = user_coll.find_one({'username':username})
+
+    if target_user is None:
+        return jsonify({'message':'ERROR: User was not found.', 'status':404})
     
+    balance = float(target_user['balance']) + float(amount)
     query = { 'username': username }
     newvalues = { '$set': { 'balance': balance } }
     user_coll.update_one(query, newvalues)
     
     return jsonify({'message':'Balance successfully updated!', 'status':200})
     
+
+@app.route('/getBalance', methods=['GET'])
+def get_balance():
+    username = request.args.get('username')
+
+    user_coll = db['user']
+    query = {'username':username}
+    user = user_coll.find_one(query)
     
+    if user is None:
+        return jsonify({'message':'ERROR: User not found.', 'status':404})
+    
+    balance = user['balance']
+    if balance is None:
+        return jsonify({'message':'ERROR: Missing balance or internal server error.', 'status':500})
+    
+    return jsonify({'balance':balance, 'status':200})
+
+
+@app.route('/getTransactions', methods=['GET'])
+def get_transactions():
+    username = request.args.get('username')
+
+    transaction_coll = db['transaction']
+    query = {'user':username}
+    transactions = transaction_coll.find(query)
+
+    if transactions is None:
+        return jsonify({'transactions':[], 'status':201})
+    
+    return jsonify({'transactions':transactions, 'status':200})
+
+
+@app.route('/deleteAccount', methods=['POST'])
+def delete_account():
+    data = request.get_json()
+
+    username = data['username']
+    user_coll = db['user']
+    
+    # Check if the user exists
+    query = {'username':username}
+    user = user_coll.find_one(query)
+
+    if user is None:
+        return jsonify({'message':'ERROR: User was not found.', 'status':404})
+    
+    transaction_coll = db['transaction']
+    query_2 = {'user':username}
+    transaction_coll.delete_many(query_2)
+
+    transaction = transaction_coll.find_one(query_2)
+    if transaction is None:
+        return jsonify({'message':'Account deleted successfully!', 'status':200})
+    
+    return jsonify({'message':'ERROR: Something wrong happened.', 'status':500})
 
 #############################################################################################
 
