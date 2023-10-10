@@ -1,57 +1,46 @@
 import '../../Css/BookStore-style.css'
 import sample from '../../Icons/sample.jpg';
+import StoreDefault from './StoreDefault';
+import StoreListView from './StoreListView';
+import { useState } from 'react';
 
-function BookStore() {
+const StoreScreens = {
+	Store: 0,
+	ListView: 1,
+}
+
+function BookStore(props) {
+    
+    var [Status,setStatus] = useState(StoreScreens.Store)
+    var [category, setCategory] = useState("")
+
+    function SearchForBook(event) {
+        //should fetch the server for a list of books
+        if (event.keyCode === 13) {
+            var bookName = document.getElementById("bookName").value
+            setStatus(StoreScreens.ListView)
+        }
+    }
+
+    function onCategoryClick(event){
+        console.log(event.currentTarget.id)
+    }
+
     return(
         <div className="StoreContainer">
             <div className="StoreTopBar">
-                <h1>
+                <h1 onClick={ () => setStatus(StoreScreens.Store)}>
                     Store
                 </h1>
                 <div className="SearchBar">
-                    <input type="text" placeholder="Find a book"></input>
+                    <input type="text" placeholder="Find a book" id="bookName" onKeyDown={SearchForBook}></input>
                 </div>
             </div>
-            <div className="PopularContainer">
-                <div className="PopularCategoryTopBar">
-                    <h2>Popular Now</h2>
-                    <h3>View all</h3>
-                </div>
-                <div className="BookCategoryList">
-                    <div className="BookListEntry">
-                        <img src={sample}></img>
-                        <h4>Lord of the Rings</h4>
-                        <h5>J.R.R. Tolkien</h5>
-                    </div>
-                    <div className="BookListEntry">
-                        <img src={sample}></img>
-                        <h4>Lord of the Rings</h4>
-                        <h5>J.R.R. Tolkien</h5>
-                    </div>
-                    <div className="BookListEntry">
-                        <img src={sample}></img>
-                        <h4>Lord of the Rings</h4>
-                        <h5>J.R.R. Tolkien</h5>
-                    </div>
-                    <div className="BookListEntry">
-                        <img src={sample}></img>
-                        <h4>Lord of the Rings</h4>
-                        <h5>J.R.R. Tolkien</h5>
-                    </div>
-                </div>
-            </div>
-            <div className="CategoryContainer">
-                <div className="PopularCategoryTopBar">
-                    <h2>Book Categories</h2>
-                    <h3>View all</h3>
-                </div>
-                <div className="BookCategoryList">
-                    <div className="CategoryListEntry">
-                        <h3>Category Name</h3>
-                        <img src={sample}></img>             
-                    </div>
-                </div>
-            </div>
+            {
+                Status == StoreScreens.Store &&  <StoreDefault onBookClick={props.OnBookClick} onCategoryClick= {onCategoryClick}></StoreDefault>
+                ||
+                Status == StoreScreens.ListView &&  <StoreListView currentCategory={category}></StoreListView>
+            }
         </div>
     );
 }
