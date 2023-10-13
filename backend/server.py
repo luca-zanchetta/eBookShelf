@@ -23,7 +23,9 @@ client = pymongo.MongoClient('mongodb://localhost:27017/')
 db = client['ebookshelf']   # create or select db 'ebookshelf'
 
 
-####################################### REST APIs ###########################################
+#############################################################################################
+###################################### USER APIs ############################################
+#############################################################################################
 @app.route("/")
 def fetch():
     return jsonify({"message":"The server is working! :)", "status":200})
@@ -156,7 +158,40 @@ def delete_account():
     
     return jsonify({'message':'ERROR: Something wrong happened.', 'status':500})
 
-#############################################################################################
 
+#############################################################################################
+###################################### BOOKS APIs ###########################################
+#############################################################################################
+@app.route('/getBooks', methods=['GET'])
+def get_books():
+    books = []
+
+    book_coll = db['book']
+
+    # Check if no book is available
+    if book_coll.find() is None:
+        return jsonify({'books':[], 'status':201})
+
+    for book in book_coll.find():
+        books.append(book)
+    
+    return jsonify({'books':books, 'status':200})
+
+
+@app.route('/getBookByISBN', methods=['GET'])
+def get_book():
+    isbn = request.args.get('isbn')
+
+    book_coll = db['book']
+    query = {'ISBN':isbn}
+    book = book_coll.find_one(query)
+
+    if book is None:
+        return jsonify({'message':'The book was not found!', 'status':404})
+    
+    return jsonify({'book':book, 'status':200})
+
+
+##############################################################################################################
 if __name__ == "__main__":
     app.run(debug=True, host="localhost", port=5000)
