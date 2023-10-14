@@ -192,6 +192,92 @@ def get_book():
     return jsonify({'book':book, 'status':200})
 
 
+@app.route('/buyBook', methods=['POST'])
+def buy_book():
+    data = request.get_json()
+    isbn = data['isbn']
+    username = data['username']
+    transactions = []
+
+    # Get book by ISBN
+    book_coll = db['book']
+    query = {'ISBN':isbn}
+    book = book_coll.find_one(query)
+    if book is None:
+        return jsonify({'message':'The book was not found!', 'status':404})
+    
+    # Get user by username
+    user_coll = db['user']
+    query = {'username':username}
+    user = user_coll.find_one(query)
+    if user is None:
+        return jsonify({'message':'ERROR: User not found.', 'status':500})
+    
+    # Verify user balance
+    if user['balance'] < book['price']:
+        return jsonify({'message':'ERROR: Your account has insufficient funds to cover this transaction.', 'status':400})
+    
+    # Buy the book
+    transaction_coll = db['transaction']
+    code = 0
+    if transaction_coll.find() is None:
+        code = 1
+    else:
+        transactions = transaction_coll.find()
+        last_transaction = transactions[0]
+        for t in transactions:
+            last_transaction = t
+
+        code = last_transaction['code'] + 1
+    
+    # Create new transaction    
+    amount = book['price']
+    new_transaction = {'code':code, 'amount':amount, 'user':username, 'book':isbn}
+    tmp = transaction_coll.insert_one(new_transaction)
+    if tmp is None:
+        return jsonify({'message':'ERROR: purchase not completed.', 'status':501})
+    
+
+    # Update user's balance
+    new_balance = user['balance'] - amount
+    if new_balance < 0:
+        return jsonify({'message':'ERROR: Your account has insufficient funds to cover this transaction.', 'status':401})
+
+    query = { 'username': username }
+    new_values = { '$set': { 'balance': new_balance } }
+    user_coll.update_one(query, new_values)
+
+    return jsonify({'message':'Transaction successfully performed!', 'status':200})
+
+
+@app.route('/getBoughtBooks', methods=['GET'])
+def get_bought_books():
+    username = request.args.get('username')
+    books = []
+
+    transaction_coll = db['transaction']
+    book_coll = db['book']
+
+    query = {'user':username}
+    transactions = transaction_coll.find(query)
+    if transactions is None:
+        return jsonify({'books':[], 'status':201})
+    
+    for t in transactions:
+        isbn = t['book']
+        query = {'ISBN':isbn}
+        book = book_coll.find_one(query)
+        if book is None:
+            return jsonify({'message':'ERROR: The book was not found.', 'status':500})
+        
+        books.append(book)
+    
+    if len(books) == 0:
+        return jsonify({'books':[], 'status':201})
+    
+    return jsonify({'books':books, 'status':200})
+
+
 ##############################################################################################################
 if __name__ == "__main__":
     app.run(debug=True, host="localhost", port=5000)
