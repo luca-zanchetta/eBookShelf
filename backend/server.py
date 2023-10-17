@@ -278,6 +278,34 @@ def get_bought_books():
     return jsonify({'books':books, 'status':200})
 
 
+@app.route('/getCategories', methods=['GET'])
+def get_categories():
+    categories = []
+    book_coll = db['book']
+    categories = book_coll.distinct('categories')
+    
+    if len(categories) == 0:
+        return jsonify({'message':'ERROR: there is no data!', 'status':500})
+
+    if '' in categories:
+        categories.remove('')
+    return jsonify({'categories':categories, 'status':200})
+
+
+@app.route('/getBooksByCategory', methods=['GET'])
+def get_books_by_category():
+    category = request.args.get('category')
+    books = []
+
+    book_coll = db['book']
+    query = {'categories':category}
+    books = book_coll.find(query)
+    if books is None:
+        return jsonify({'message':'No book found for this category!', 'status':201})
+    
+    return jsonify({'books':books, 'status':200})
+
+
 ##############################################################################################################
 if __name__ == "__main__":
     app.run(debug=True, host="localhost", port=5000)
