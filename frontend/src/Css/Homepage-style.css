@@ -9,9 +9,12 @@
 
 
 .HomeContainer > hr {
+    margin: 0;
+    padding: 0;
     height: 150%;
-    width: 2px;
-    color: grey;
+    width: min-content;
+    border: 1px solid rgb(188, 188, 188);
+
 }
 
 

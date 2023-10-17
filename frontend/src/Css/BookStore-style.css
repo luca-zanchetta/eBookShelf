@@ -1,26 +1,26 @@
 .StoreContainer {
     display: flex;
     flex-direction: column;
-    padding: 1.5%;
     width: -webkit-fill-available;
     height: -webkit-fill-available;
 }
 
 .CenterStoreContainer {
     display: flex;
+    padding: 2%;
     flex-direction: column;
     width: -webkit-fill-available;
     height: -webkit-fill-available;
 }
 
 .StoreTopBar {
+    padding: 1.5%;
     display: flex;
     width: -webkit-fill-available;
     flex-direction: row;
     justify-content: space-between;
     align-content: center;
     align-items: center;
-    margin-bottom: 5%;
 }
 
 .StoreTopBar > h1 {
@@ -56,6 +56,7 @@
 } 
 
 .PopularContainer {
+    padding: 1.5%;
     display: flex;
     width: -webkit-fill-available;
     flex-direction: column;
@@ -77,6 +78,7 @@
 }
 
 .BookCategoryList {
+    margin-top: 2%;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -88,8 +90,6 @@
     flex-direction: column;
     align-items: center;
     width: 25%;
-    padding: 3% 0% 3% 0%;
-    margin: 1%;
 }
 
 .BookListEntry > img {
@@ -116,6 +116,7 @@
 }
 
 .CategoryContainer {
+    padding: 1.5%;
     display: flex;
     flex-direction: column;
     width: -webkit-fill-available;
@@ -133,7 +134,6 @@
     align-items: center;
     width: 10%;
     height: -webkit-fill-available;
-    margin: 1%;
     padding: 5%;
 }
 
@@ -154,6 +154,12 @@
 
 
 /* LIST VIEW RULES */
+#style-1:-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 10px;
+	background-color: #F5F5F5;
+}
 
 .ListContainer {
     display: flex;
@@ -161,6 +167,5 @@
     flex-direction: row;
     flex-wrap: wrap;
     width: -webkit-fill-available;
-    height: fit-content;
     overflow-y: auto;
 }

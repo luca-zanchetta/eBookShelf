@@ -1,0 +1,187 @@
+.Dashboard {
+    display: flex;
+    height: -webkit-fill-available;
+    width: -webkit-fill-available;
+
+    flex-direction: column;
+    padding: 1.5%;
+}
+
+.DashboardTopBar {
+    display: flex;
+    width: -webkit-fill-available;
+
+}
+
+.DashboardTopBar > h1 {
+    margin: 0;
+}
+
+.PageCenter {
+    width: -webkit-fill-available;
+    display: flex;
+    padding: 1.5%;
+    height: 40%;
+    flex-direction: column;
+}
+
+.PageCenter > h2 {
+    margin: 0;
+}
+
+.BlockList {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    height: -webkit-fill-available;   
+}
+
+.SuggestedBooks {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-width: 70%;
+    justify-content: space-around
+}
+
+.SuggestedBooksEntry {
+   
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    width: -webkit-fill-available;
+    height: 25%;
+}
+
+.SuggestedBookImage {
+    display: flex;
+    object-fit: cover;
+    aspect-ratio: 1/1;
+    border-radius: 8px 0px 0px 8px;
+    max-width: 15%;
+
+    border-left: 1px solid;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+}
+
+.RightArrowImg {
+    display: flex;
+}
+
+.SuggestedBooksEntryText {
+    display: flex;
+    width: -webkit-fill-available;
+    justify-content: space-around;
+    padding: 1.5%;
+    align-items: flex-start;
+    flex-direction: column;
+    background-color: #F3F3F4;
+    border-radius: 0px 8px 8px 0px;
+    border-right: 1px solid;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+}
+
+.SuggestedBooksEntryText >h3 {
+    margin: 0;
+    font-weight: normal;
+}
+
+.SuggestedBooksEntryText >h4 {
+    margin: 0;
+    font-weight: normal;
+}
+
+.BookData {
+    display: flex;
+    flex-direction: row;
+    height: min-content;
+}
+
+.BookData > div {
+    font-size: medium;
+    font-weight: normal;
+    margin-right: 20%;
+}
+
+.CreditDisplay {
+    display: flex;
+    flex-direction: column;
+    height: -webkit-fill-available;
+    align-items: center;
+    width:  17.5%;
+    border-radius:  8px;
+    background: linear-gradient(110deg,  rgb(120,70,180) 70%,  #8b61bf 70%);
+    color: white;
+    padding: 1.5%;
+    justify-content: space-between
+}
+
+.CreditDisplay > h2 {
+    margin: 5%;
+    width:auto;
+}
+
+.Movements {
+    display: flex;
+    flex-direction: row;
+    width: -webkit-fill-available;
+    justify-content: space-around;
+}
+
+.Movement{
+    width: 45%;
+    border-radius: 10vh;
+    background-color: white;
+    display: flex;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+}
+
+.Movement > img {
+    aspect-ratio: 1 / 1;
+    max-width: 30%;
+    border-radius: 50%;
+}
+.Movement > h3 {
+    width: 70%;
+    color: black;
+    margin: 0;
+}
+
+#entries {
+    box-shadow: 0 0 10px 2px rgb(0,219,187,.5);
+}
+
+#expenses {
+    box-shadow: 0 0 10px 2px rgb(255,97,116,.5);
+}
+
+#balance {
+    display: flex;
+    width: -webkit-fill-available;
+    justify-content: center;
+    margin: 5% 0% 5% 0%;
+    font-size: 50px;
+}
+
+.CreditDisplay > input[type="button"]{
+    width: 70%;
+    box-shadow: 0 2px 10px 1px rgb(253,208,91);
+    background-color: rgb(253,208,91);
+    border-radius: 10px;
+    outline: none;
+    border: none;
+    font-size: large;
+    cursor: pointer;
+}
+
+.CreditDisplay > input[type="button"]:hover{
+    background-color: rgb(255, 227, 156);
+}
+
+
+
+

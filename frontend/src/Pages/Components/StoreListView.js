@@ -3,7 +3,7 @@ import sample from '../../Icons/sample.jpg';
 
 function StoreListView(props) {
     return(
-        <div className="CenterStoreContainer">
+        <div className="CenterStoreContainer" id='style-1'>
             <div className="ListContainer">
                 <div className="BookListEntry">
                     <img src={sample}></img>

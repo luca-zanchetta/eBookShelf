@@ -4,17 +4,24 @@ import store from '../../Icons/purse.png';
 import books from '../../Icons/books.png';
 import settings from '../../Icons/settings.png';
 import logout from '../../Icons/logout.png';
+import dashboard from '../../Icons/dashboard.png';
 import React, { useState } from 'react';
+import { Screens } from '../Homepage';
 
 function Navbar({OnNavigatorClick}) {
-    const [currentDisplay,setDisplay] = useState(1);
+    const [currentDisplay,setDisplay] = useState(Screens.Store);
     const OnClick = event => {
+        var display = 0
         if(event.currentTarget.id == 'store')
-            setDisplay(1)
+            display = Screens.Store
+        else if(event.currentTarget.id == 'library')
+            display = Screens.Library
         else
-            setDisplay(2)
+            display = Screens.Dashboard
 
-        OnNavigatorClick(currentDisplay);
+            console.log(display)
+        setDisplay(currentDisplay)
+        OnNavigatorClick(display);
       };
 
     return(
@@ -35,18 +42,25 @@ function Navbar({OnNavigatorClick}) {
             <div className='ToggleMenu'>
             {/* =============== TOGGLE MENU ================== */}
                 <div className='ToggleEntry'>
-                    <input type='radio' id="store" name="menu" onClick={OnClick} checked = { 1 == currentDisplay }></input>
+                    <input type='radio' id="store" name="menu" onClick={OnClick} defaultChecked = { Screens.Store == currentDisplay }></input>
                     <div className='ToggleIcon'>
                         <img src={store}></img>
                     </div>
                     <label for="store">Book store</label>
                 </div>
                 <div className='ToggleEntry'>
-                    <input type='radio' id="library" name="menu"onClick={OnClick} checked = { 2 == currentDisplay }></input>
+                    <input type='radio' id="library" name="menu"onClick={OnClick} defaultChecked = { Screens.Library == currentDisplay }></input>
                     <div className='ToggleIcon'>
                         <img src={books}></img>
                     </div>
                     <label for="library">My Library</label>
+                </div>
+                <div className='ToggleEntry'>
+                    <input type='radio' id="dashboard" name="menu" onClick={OnClick} defaultChecked = { Screens.Dashboard == currentDisplay }></input>
+                    <div className='ToggleIcon'>
+                        <img src={dashboard}></img>
+                    </div>
+                    <label for="dashboard">Dashboard</label>
                 </div>
             </div>
             <hr />

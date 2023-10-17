@@ -4,10 +4,12 @@ import BookStore from './Components/BookStore';
 import Navbar from './Components/Navbar';
 import { useState } from 'react';
 import React from 'react';
+import Dashboard from './Components/Dashboard';
 
-const Screens = {
+export const Screens = {
 	Store: 0,
 	Library: 1,
+  Dashboard: 2,
 }
 
 
@@ -19,18 +21,7 @@ function Homepage() {
     //page manager
     function ChangeWindow(page) {
         //page continene l'id dei componenti del toggle menu
-        switch (page) {
-          case 'library':
-            //code to switch to  library
-            changeState(Screens.Library)
-            break;
-          case 'store':
-            //code to switch to store 
-            changeState(Screens.Store)
-            break;
-          default:
-            break;
-        }
+        changeState(page)
     }
 
     //Book overview manager
@@ -42,8 +33,15 @@ function Homepage() {
       <div className='HomeContainer'>
         <Navbar OnNavigatorClick={ChangeWindow}></Navbar>
         <hr />
-        <BookStore OnBookClick={OnBookClicked} currentScreen={currentScreen}></BookStore>
-        <BookPreview ref={ref} book={currentDisplayingBook}></BookPreview>
+        {
+          currentScreen == Screens.Store && <BookStore OnBookClick={OnBookClicked} currentScreen={currentScreen}></BookStore>
+        }
+        {
+          currentScreen == Screens.Store && <BookPreview ref={ref} book={currentDisplayingBook}></BookPreview>
+        }
+        {
+          currentScreen == Screens.Dashboard && <Dashboard ref={ref} book={currentDisplayingBook}></Dashboard>
+        }
       </div>
     );
   }

@@ -1,9 +1,15 @@
 .Container {
     height: 100%;
-    width: 20%;
+    max-width: 12%;
+    min-width: 12%;
     display: flex;
     flex-direction: column;
     align-content: center;
+}
+
+.Container>h1{
+    margin-bottom: 1%;
+    font-weight: 900;
 }
 
 hr {
@@ -16,7 +22,7 @@ hr {
 
 .ProfileContainer {
     display: flex;
-    width: 100%;
+    width: -webkit-fill-available;
     padding: 2%;
     align-items: center;
     flex-direction: column;
@@ -30,6 +36,7 @@ hr {
 }
 
 .ProfileContainer > h2 {
+    font-weight: 600;
     margin: 1%;
 }
 
@@ -67,9 +74,10 @@ hr {
     display: flex;
     font-size: large;
     font-weight: bold;
-    width: 100%;
+    width: -webkit-fill-available;
     text-align: center;
     white-space: nowrap;
+    font-size: 1.2vw;
 }
 
 .ToggleIcon {
@@ -94,8 +102,8 @@ hr {
 .ToggleEntry > input[type="radio"] {
     opacity: 0;
     position: absolute;
-    width: 100%;
-    height: 100%;
+    width: -webkit-fill-available;;
+    height: -webkit-fill-available;;
     cursor: pointer;
     z-index: 3;
 }
@@ -103,14 +111,15 @@ hr {
 .ToggleEntry > input[type="button"] {
     opacity: 0;
     position: absolute;
-    width: 100%;
-    height: 100%;
+    width: -webkit-fill-available;
+    height: -webkit-fill-available;
     cursor: pointer;
     z-index: 3;
 }
 
 .ToggleEntry > input[type="radio"]:checked+.ToggleIcon+label { 
     color: rgb(120,70,180);
+    font-weight: bolder;
 }
 .ToggleEntry > input[type="radio"]:checked+.ToggleIcon { 
     background-color: rgb(120,70,180);
