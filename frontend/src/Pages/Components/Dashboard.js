@@ -4,7 +4,21 @@ import sample from '../../Icons/sample.jpg';
 import upArrow from '../../Icons/down-arrow.png';
 import downArrow from '../../Icons/up-arrow.png';
 import right from '../../Icons/next.png'
+import { useState } from 'react';
 function Dashboard() {
+    var timeout
+    const [showMoneyCharge, setShowMoney] = useState(false);
+    function ChargeMoney(){
+        if(!showMoneyCharge){
+            setShowMoney(true);
+            clearTimeout(timeout)
+            timeout = setTimeout(() => setShowMoney(false), 10000)
+        }else{
+
+        }
+        
+    }
+    
     return(
         <div className="Dashboard">
            <div className='DashboardTopBar'>
@@ -72,8 +86,12 @@ function Dashboard() {
                                     </h3>
                                 </div>
                             </div>
-                        </div>      
-                            <input type='button' value="Charge Money"></input>
+                        </div>
+                        {
+                            showMoneyCharge && <input type='text' id="money" onChange={() => {clearTimeout(timeout); timeout = setTimeout(() => setShowMoney(false), 10000)}}></input>
+                        }
+                            
+                        <input type='button' value="Charge Money" onClick={ChargeMoney}></input>
                         </div>
                     </div>
                 </div>

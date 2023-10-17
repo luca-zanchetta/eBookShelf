@@ -108,14 +108,16 @@
 .CreditDisplay {
     display: flex;
     flex-direction: column;
-    height: -webkit-fill-available;
+    height: min-content;
     align-items: center;
     width:  17.5%;
     border-radius:  8px;
     background: linear-gradient(110deg,  rgb(120,70,180) 70%,  #8b61bf 70%);
     color: white;
     padding: 1.5%;
-    justify-content: space-between
+    justify-content: space-between;
+    transition: all 1000ms;
+    transition-timing-function: ease-out;
 }
 
 .CreditDisplay > h2 {
@@ -153,10 +155,12 @@
 
 #entries {
     box-shadow: 0 0 10px 2px rgb(0,219,187,.5);
+    transform: rotate(180deg);
 }
 
 #expenses {
     box-shadow: 0 0 10px 2px rgb(255,97,116,.5);
+    transform: rotate(180deg);
 }
 
 #balance {
@@ -165,6 +169,17 @@
     justify-content: center;
     margin: 5% 0% 5% 0%;
     font-size: 50px;
+}
+
+.CreditDisplay > input[type="text"]{
+    width: 40%;
+    border-radius: 10px;
+    outline: none;
+    border: none;
+    font-size: large;
+    cursor: pointer;
+    text-align: center;
+    margin: 5% 0% 5% 0%;
 }
 
 .CreditDisplay > input[type="button"]{
@@ -176,6 +191,7 @@
     border: none;
     font-size: large;
     cursor: pointer;
+    margin-top: 5%;
 }
 
 .CreditDisplay > input[type="button"]:hover{
