@@ -4,13 +4,16 @@ import hide from '../Icons/hide.png';
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 const LoginResult = {
     correctField : 0,
     invalidField : 1,
     wrongContent : 2
 }
 
-function Login(){
+const endpoint = 'http://localhost:5000/login';
+
+function Login() {
     const navigate = useNavigate();
     
     const [showPs, SetShow] = useState(false);
@@ -28,7 +31,7 @@ function Login(){
         }
     }
 
-    function SubmitLogin() {
+    async function SubmitLogin() {
         var username = document.getElementById("username").value;
         var password = document.getElementById("password").value;
 
@@ -42,6 +45,26 @@ function Login(){
             return;
         }
 
+        try {
+            // Send a POST request to the /login endpoint of the Flask server
+            const response = await axios
+              .post(endpoint, {
+                username,
+                password,
+              });
+    
+            // If the login has been successfully performed, then redirect the user to the homepage.
+            if (response.status === 200) {
+                navigate('/homepage');
+            }
+            else if (response.status === 400 || response.status === 404) {
+                SetInvPs(LoginResult.wrongContent);
+            }
+          } 
+          catch (error) {
+            // Request failed
+            console.log("[ERROR] Request failed: " + error);
+          }
     }
 
 

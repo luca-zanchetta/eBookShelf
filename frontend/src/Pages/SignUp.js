@@ -4,12 +4,15 @@ import hide from '../Icons/hide.png';
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 
 const LoginResult = {
     correctField : 0,
     invalidField : 1,
     wrongContent : 2
 }
+
+const endpoint = 'http://localhost:5000/register';
 
 function SignUp(){
     const navigate = useNavigate();
@@ -21,7 +24,7 @@ function SignUp(){
     const [invalidSurn, SetInvSurn] = useState(LoginResult.correctField);
     const [invalidCopyPs, SetInvCopyPs] = useState(LoginResult.correctField);
 
-    function ToggleShow(){
+    function ToggleShow() {
         var x = document.getElementById("password");
         if (x.type === "password") {
             x.type = "text";
@@ -32,7 +35,7 @@ function SignUp(){
         }
     }
 
-    function SubmitLogin() {
+    async function SubmitLogin() {
         var checkPassed = true
         var username = document.getElementById("username").value;
         var password = document.getElementById("password").value;
@@ -45,7 +48,7 @@ function SignUp(){
             checkPassed = false
         }
 
-        if(!password || password.length <= 8){
+        if(!password || password.length < 8){
             SetInvPs(LoginResult.invalidField);
             checkPassed = false
         }
@@ -66,6 +69,32 @@ function SignUp(){
         }
 
         if(!checkPassed) return
+
+        try {
+            // Send a POST request to the /login endpoint of the Flask server
+            const response = await axios
+              .post(endpoint, {
+                username,
+                name,
+                surname,
+                password,
+              });
+    
+            // If the login has been successfully performed, then redirect the user to the login page.
+            if (response.status === 200) {
+                navigate('/login');
+            }
+            else if (response.status === 400) {
+                SetInvPs(LoginResult.invalidField);
+            }
+            else if (response.status === 500) {
+                alert(response.message);
+            }
+          } 
+          catch (error) {
+            // Request failed
+            console.log("[ERROR] Request failed: " + error);
+          }
     } 
 
 
@@ -185,7 +214,7 @@ function SignUp(){
                             {invalidCopyPs == LoginResult.wrongContent &&<h4 className="invalidContentMessage">Passwords are diffrent!</h4>}
                         </div>
                     </div>
-                    <input type='button' value="Login"  onClick={SubmitLogin}></input>
+                    <input type='button' value="Register"  onClick={SubmitLogin}></input>
                 </div>
         </div>
     )
