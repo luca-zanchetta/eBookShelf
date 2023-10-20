@@ -98,6 +98,25 @@ def add_money():
     query = { 'username': username }
     newvalues = { '$set': { 'balance': balance } }
     user_coll.update_one(query, newvalues)
+
+    # Create an income transaction
+    transaction_coll = db['transaction']
+    code = 0
+    if transaction_coll.find() is None:
+        code = 1
+    else:
+        transactions = transaction_coll.find()
+        last_transaction = transactions[0]
+        for t in transactions:
+            last_transaction = t
+
+        code = last_transaction['code'] + 1
+    
+    # Create new transaction    
+    new_transaction = {'code':code, 'amount':amount, 'user':username}
+    tmp = transaction_coll.insert_one(new_transaction)
+    if tmp is None:
+        return jsonify({'message':'ERROR: charge not completed.', 'status':501})
     
     return jsonify({'message':'Balance successfully updated!', 'status':200})
     
@@ -157,6 +176,59 @@ def delete_account():
         return jsonify({'message':'Account deleted successfully!', 'status':200})
     
     return jsonify({'message':'ERROR: Something wrong happened.', 'status':500})
+
+
+@app.route('/getTotalChargedMoney', methods=['GET'])
+def get_total_charged_money():
+    username = request.args.get('username')
+    amount = 0
+
+    transaction_coll = db['transaction']
+    user_coll = db['user']
+
+    # Check if the user exists
+    query = {'username':username}
+    user = user_coll.find_one(query)
+    if user is None:
+        return jsonify({'message':'ERROR: User was not found.', 'status':404})
+    
+    query = {'user':username}
+    transactions = transaction_coll.find(query)
+    if transactions is None:
+        return jsonify({'amount':amount, 'status':201})
+    
+    for transaction in transactions:
+        if transaction['amount'] >= 0:
+            amount += transaction['amount']
+    
+    return jsonify({'amount':amount, 'status':200})
+
+
+@app.route('/getTotalExpenses', methods=['GET'])
+def get_total_expenses():
+    username = request.args.get('username')
+    amount = 0
+
+    transaction_coll = db['transaction']
+    user_coll = db['user']
+
+    # Check if the user exists
+    query = {'username':username}
+    user = user_coll.find_one(query)
+    if user is None:
+        return jsonify({'message':'ERROR: User was not found.', 'status':404})
+    
+    query = {'user':username}
+    transactions = transaction_coll.find(query)
+    if transactions is None:
+        return jsonify({'amount':amount, 'status':201})
+    
+    for transaction in transactions:
+        if transaction['amount'] < 0:
+            amount += transaction['amount']
+    
+    return jsonify({'amount':amount, 'status':200})
+
 
 
 #############################################################################################
@@ -232,7 +304,7 @@ def buy_book():
     
     # Create new transaction    
     amount = book['price']
-    new_transaction = {'code':code, 'amount':amount, 'user':username, 'book':isbn}
+    new_transaction = {'code':code, 'amount':-amount, 'user':username, 'book':isbn}
     tmp = transaction_coll.insert_one(new_transaction)
     if tmp is None:
         return jsonify({'message':'ERROR: purchase not completed.', 'status':501})
@@ -304,6 +376,21 @@ def get_books_by_category():
         return jsonify({'message':'No book found for this category!', 'status':201})
     
     return jsonify({'books':books, 'status':200})
+
+
+@app.route('/getBooksByName', methods=['GET'])
+def get_books_by_name():
+    name = request.args.get('name')
+    books = []
+    regex = f".*\\b{name}\\b.*"
+    
+    book_coll = db['book']
+    books = book_coll.find({'name':{'$regex':regex}})
+    if books is None:
+        return jsonify({'books':[], 'status':201})
+    
+    return jsonify({'books':books, 'status':200})
+
 
 
 ##############################################################################################################
