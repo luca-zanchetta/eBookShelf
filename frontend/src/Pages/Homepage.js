@@ -4,6 +4,7 @@ import BookStore from './Components/BookStore';
 import Navbar from './Components/Navbar';
 import { useState } from 'react';
 import React from 'react';
+import { Navigate } from 'react-router-dom';
 import Dashboard from './Components/Dashboard';
 
 export const Screens = {
@@ -12,6 +13,7 @@ export const Screens = {
   Dashboard: 2,
 }
 
+const loggedIn = localStorage.getItem('LoggedUser');
 
 function Homepage() {
     var currentDisplayingBook = null;
@@ -31,6 +33,7 @@ function Homepage() {
 
     return (
       <div className='HomeContainer'>
+        {!loggedIn && <Navigate to="/login" />}
         <Navbar OnNavigatorClick={ChangeWindow}></Navbar>
         <hr />
         {

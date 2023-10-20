@@ -6,10 +6,13 @@ import settings from '../../Icons/settings.png';
 import logout from '../../Icons/logout.png';
 import dashboard from '../../Icons/dashboard.png';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Screens } from '../Homepage';
 
 function Navbar({OnNavigatorClick}) {
     const [currentDisplay,setDisplay] = useState(Screens.Store);
+    const navigate = useNavigate();
+
     const OnClick = event => {
         var display = 0
         if(event.currentTarget.id == 'store')
@@ -22,7 +25,19 @@ function Navbar({OnNavigatorClick}) {
             console.log(display)
         setDisplay(currentDisplay)
         OnNavigatorClick(display);
-      };
+    }
+
+    const handleLogout = async (event) => {
+        event.preventDefault();
+    
+        const loggedIn = localStorage.getItem("LoggedUser");
+        if (loggedIn) {
+          localStorage.clear();
+          sessionStorage.clear();
+          navigate("/login");
+          window.location.replace(window.location.href);
+        }
+    }
 
     return(
         <div className='Container'>
@@ -73,7 +88,7 @@ function Navbar({OnNavigatorClick}) {
                     </div>
                     <label for="settings">Settings</label>
                 </div>
-                <div className='ToggleEntry'>
+                <div className='ToggleEntry' onClick={handleLogout}>
                     <input type='button' id="logout" name="logout"></input>
                     <div className='ToggleIcon'>
                         <img src={logout}></img>
