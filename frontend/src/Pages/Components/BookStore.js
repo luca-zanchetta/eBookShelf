@@ -2,7 +2,7 @@ import '../../Css/BookStore-style.css'
 import sample from '../../Icons/sample.jpg';
 import StoreDefault from './StoreDefault';
 import StoreListView from './StoreListView';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const StoreScreens = {
 	Store: 0,
@@ -13,6 +13,13 @@ function BookStore(props) {
     
     var [Status,setStatus] = useState(StoreScreens.Store)
     var [category, setCategory] = useState("")
+
+
+    useEffect(() =>
+    {
+
+    }
+    )
 
     function SearchForBook(event) {
         //should fetch the server for a list of books

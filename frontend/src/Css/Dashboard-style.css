@@ -199,5 +199,180 @@
 }
 
 
+.PageBottom {
+    display: flex;
+    flex-direction: row;
+    width: -webkit-fill-available;
+    height: -webkit-fill-available;
+}
+
+.TransactionHistory {
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    background-color: #F3F3F4;
+    border: 1px solid black;
+    min-width: 52%;
+    margin: 1%;
+    padding: 1%;
+}
+
+.TransactionHistoryTop {
+    display: flex;
+    flex-direction: row;
+}
+
+.TransactionHistoryTop > h2 {
+    margin: 0;
+    width: -webkit-fill-available;
+}
+
+.TransactionHistoryTop > h4 {
+    margin: 0;
+    font-weight: normal;
+    color: rgb(120,70,180);
+    white-space: nowrap;
+}
+
+.TransactionHistoryEntry {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    padding: 1%;
+    margin: 1% 0 1% 0%;
+}
+
+.TransactionHistoryEntry > h4 {
+    margin: 0;
+    font-weight: bold;
+    white-space: nowrap;
+    margin-right: 4%;
+}
+
+.Minus {
+    color: rgb(255,97,116);
+    margin: 0;
+    font-weight: normal;
+    white-space: nowrap;
+    text-align: right;
+}
+
+.Plus {
+    color: rgb(0,219,187);
+    margin: 0;
+    white-space: nowrap;
+}
+
+
+.ProfileRecap {
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    background-color: #F3F3F4;
+    border: 1px solid black;
+    width: -webkit-fill-available;
+    height: -webkit-fill-available;
+    margin: 1%;
+    padding: 1%;
+}
+
+.ProfileRecapLeft {
+    flex: 1;
+    flex-direction: column;
+}
+
+.ProfileRecapLeftTop {
+    display: flex;
+    flex: 1;
+}
+.ProfileRecapLeft > h2 {
+    margin: 0;
+}
+
+.ProfileRecapGenres {
+    display: flex;
+    flex-direction: column;
+    padding: 1%;
+}
+
+.ProfileRecapGenresEntry {
+    flex-direction: row;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2%;
+}
+
+.ProfileRecapGenresEntry > h4 {
+    margin: 0;
+    width: 30%;
+    display: flex;
+    justify-content: center;
+}
+
+.ProgressBar {
+    display: flex;
+    border-radius: 20px;
+    background-color: white;
+    width: 33%;
+}
+
+.ProgressBar > div {
+    background-color: #8b61bf;
+    border-radius: 20px;
+}
+
+.Stats {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.StatsEntry {
+    display: flex;
+    flex: row;
+}
+
+.StatsEntryImg{
+    aspect-ratio: 1/1;
+    width: 10vh;
+    height: 10vh;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    background-color: white;
+}
+
+.StatsData {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-left: 5%;
+}
+
+.StatsData > h4 {
+    color: grey;
+    margin: 0;
+    font-weight: normal;
+    padding: 2%;
+    white-space: nowrap;
+}
+
+.StatsData > h2 {
+    margin: 0;
+}
+
+.StatsEntryImg > img {
+    aspect-ratio: 1/1;
+    max-width: 60%;
+}
+
+    
+
 
 

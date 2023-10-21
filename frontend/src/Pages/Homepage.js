@@ -5,6 +5,7 @@ import Navbar from './Components/Navbar';
 import { useState } from 'react';
 import React from 'react';
 import Dashboard from './Components/Dashboard';
+import Library from './Components/Library';
 
 export const Screens = {
 	Store: 0,
@@ -41,6 +42,9 @@ function Homepage() {
         }
         {
           currentScreen == Screens.Dashboard && <Dashboard ref={ref} book={currentDisplayingBook}></Dashboard>
+        }
+        {
+          currentScreen == Screens.Library && <Library></Library>
         }
       </div>
     );
