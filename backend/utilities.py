@@ -7,7 +7,7 @@ db = client['ebookshelf']   # create db 'ebookshelf'
 
 def load_data():
     books = []
-    with open('books.csv', 'r', encoding='utf-8') as file:
+    with open('./backend/books.csv', 'r', encoding='utf-8') as file:
         # Read the CSV file
         csv_reader = csv.reader(file)
 
