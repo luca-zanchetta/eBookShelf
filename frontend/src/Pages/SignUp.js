@@ -3,7 +3,7 @@ import show from '../Icons/show.png';
 import hide from '../Icons/hide.png';
 
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import axios from "axios";
 
 const LoginResult = {
@@ -13,6 +13,7 @@ const LoginResult = {
 }
 
 const endpoint = 'http://localhost:5000/register';
+const loggedIn = localStorage.getItem("LoggedUser");
 
 function SignUp(){
     const navigate = useNavigate();
@@ -53,7 +54,7 @@ function SignUp(){
             checkPassed = false
         }
 
-        if(!copyPassword || copyPassword != password){
+        if(!copyPassword || copyPassword !== password){
             SetInvPs(LoginResult.invalidField);
             checkPassed = false
         }
@@ -100,6 +101,7 @@ function SignUp(){
 
     return(
         <div className='LoginContainer'>
+            {loggedIn && <Navigate to="/homepage" />}
             <h1 className='Logo'>EBook-Shelf</h1>
             <div className="Background">
             </div>
@@ -117,14 +119,14 @@ function SignUp(){
                             </h4>
                         </div>
                         {
-                            ((invalidUs == LoginResult.invalidField || invalidUs == LoginResult.wrongContent)
+                            ((invalidUs === LoginResult.invalidField || invalidUs === LoginResult.wrongContent)
                             && <input type='text' id='username' className='InvalidInput'></input>)
                             ||
-                           ( invalidUs == LoginResult.correctField && <input type='text' id='username'></input>)
+                           ( invalidUs === LoginResult.correctField && <input type='text' id='username'></input>)
                         }
                         <div className='InputLabels'>
-                            {invalidUs == LoginResult.invalidField && <h4 className="invalidContentMessage">Invalid content!</h4>}
-                            {invalidUs == LoginResult.wrongContent && <h4 className="invalidContentMessage">Wrong username!</h4>}       
+                            {invalidUs === LoginResult.invalidField && <h4 className="invalidContentMessage">Invalid content!</h4>}
+                            {invalidUs === LoginResult.wrongContent && <h4 className="invalidContentMessage">Wrong username!</h4>}       
                         </div>
                     </div>
                     <div className='InputForms'>
@@ -135,13 +137,13 @@ function SignUp(){
                             
                         </div>
                         {
-                            ((invalidName == LoginResult.invalidField || invalidName == LoginResult.wrongContent)
+                            ((invalidName === LoginResult.invalidField || invalidName === LoginResult.wrongContent)
                             && <input type='text' id='name' className='InvalidInput'></input>)
                             ||
-                           ( invalidName == LoginResult.correctField && <input type='text' id='name'></input>)
+                           ( invalidName === LoginResult.correctField && <input type='text' id='name'></input>)
                         }
                         <div className='InputLabels'>
-                            {invalidName == LoginResult.invalidField && <h4 className="invalidContentMessage">Invalid content!</h4>}
+                            {invalidName === LoginResult.invalidField && <h4 className="invalidContentMessage">Invalid content!</h4>}
                         </div>
                     </div>
                     <div className='InputForms'>
@@ -151,13 +153,13 @@ function SignUp(){
                             </h3>
                         </div>
                         {
-                            ((invalidSurn == LoginResult.invalidField || invalidSurn == LoginResult.wrongContent)
+                            ((invalidSurn === LoginResult.invalidField || invalidSurn === LoginResult.wrongContent)
                             && <input type='password' id='surname' className='InvalidInput'></input>)
                             ||
-                           ( invalidSurn == LoginResult.correctField && <input type='text' id='surname'></input>)
+                           ( invalidSurn === LoginResult.correctField && <input type='text' id='surname'></input>)
                         }
                         <div className='InputLabels'>
-                            {invalidSurn == LoginResult.invalidField && <h4 className="invalidContentMessage">Invalid content!</h4>}
+                            {invalidSurn === LoginResult.invalidField && <h4 className="invalidContentMessage">Invalid content!</h4>}
                         </div>
                     </div>
                     <div className='InputForms'>
@@ -177,14 +179,14 @@ function SignUp(){
                             </h4>
                         </div>
                         {
-                            ((invalidPs == LoginResult.invalidField || invalidPs == LoginResult.wrongContent)
+                            ((invalidPs === LoginResult.invalidField || invalidPs === LoginResult.wrongContent)
                             && <input type='password' id='password' className='InvalidInput'></input>)
                             ||
-                           ( invalidPs == LoginResult.correctField && <input type='password' id='password'></input>)
+                           ( invalidPs === LoginResult.correctField && <input type='password' id='password'></input>)
                         }
                         <div className='InputLabels'>
-                            {invalidPs == LoginResult.invalidField && <h4 className="invalidContentMessage">insert at least 8 characters!</h4>}
-                            {invalidPs == LoginResult.wrongContent &&<h4 className="invalidContentMessage">Passwords are diffrent!</h4>}
+                            {invalidPs === LoginResult.invalidField && <h4 className="invalidContentMessage">insert at least 8 characters!</h4>}
+                            {invalidPs === LoginResult.wrongContent &&<h4 className="invalidContentMessage">Passwords are diffrent!</h4>}
                         </div>
                     </div>
                     <div className='InputForms'>
@@ -204,14 +206,14 @@ function SignUp(){
                             </h4>
                         </div>
                         {
-                            ((invalidCopyPs == LoginResult.invalidField || invalidCopyPs == LoginResult.wrongContent)
+                            ((invalidCopyPs === LoginResult.invalidField || invalidCopyPs === LoginResult.wrongContent)
                             && <input type='password' id='password' className='InvalidInput'></input>)
                             ||
-                           ( invalidCopyPs == LoginResult.correctField && <input type='password' id='copyPassword'></input>)
+                           ( invalidCopyPs === LoginResult.correctField && <input type='password' id='copyPassword'></input>)
                         }
                         <div className='InputLabels'>
-                            {invalidCopyPs == LoginResult.invalidField && <h4 className="invalidContentMessage">Invalid content!</h4>}
-                            {invalidCopyPs == LoginResult.wrongContent &&<h4 className="invalidContentMessage">Passwords are diffrent!</h4>}
+                            {invalidCopyPs === LoginResult.invalidField && <h4 className="invalidContentMessage">Invalid content!</h4>}
+                            {invalidCopyPs === LoginResult.wrongContent &&<h4 className="invalidContentMessage">Passwords are diffrent!</h4>}
                         </div>
                     </div>
                     <input type='button' value="Register"  onClick={SubmitLogin}></input>

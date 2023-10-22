@@ -3,7 +3,7 @@ import show from '../Icons/show.png';
 import hide from '../Icons/hide.png';
 
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import axios from "axios";
 const LoginResult = {
     correctField : 0,
@@ -12,6 +12,7 @@ const LoginResult = {
 }
 
 const endpoint = 'http://localhost:5000/login';
+const loggedIn = localStorage.getItem('LoggedUser');
 
 function Login() {
     const navigate = useNavigate();
@@ -55,7 +56,9 @@ function Login() {
     
             // If the login has been successfully performed, then redirect the user to the homepage.
             if (response.status === 200) {
+                localStorage.setItem("LoggedUser", username); // Set a session variable
                 navigate('/homepage');
+                window.location.replace(window.location.href);
             }
             else if (response.status === 400 || response.status === 404) {
                 SetInvPs(LoginResult.wrongContent);
@@ -70,6 +73,7 @@ function Login() {
 
     return(
         <div className='LoginContainer'>
+            {loggedIn && <Navigate to="/homepage" />}
             <h1 className='Logo'>EBook-Shelf</h1>
             <div className="Background">
             </div>
