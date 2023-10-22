@@ -9,9 +9,13 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Screens } from '../Homepage';
 
+const loggedIn = localStorage.getItem('LoggedUser')
+
 function Navbar({OnNavigatorClick}) {
     const [currentDisplay,setDisplay] = useState(Screens.Store);
     const navigate = useNavigate();
+
+    
 
     const OnClick = event => {
         var display = 0
@@ -50,7 +54,7 @@ function Navbar({OnNavigatorClick}) {
                     Nome Utente
                 </h2>
                 <h4>
-                    @nomeUtente
+                    @{loggedIn}
                 </h4>
             </div>
             <hr />
