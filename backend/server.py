@@ -218,7 +218,7 @@ def get_total_expenses():
     if user is None:
         return jsonify({'message':'ERROR: User was not found.', 'status':404})
     
-    query = {'user':username}
+    query = {'username':username}
     transactions = transaction_coll.find(query)
     if transactions is None:
         return jsonify({'amount':amount, 'status':201})
@@ -228,6 +228,21 @@ def get_total_expenses():
             amount += transaction['amount']
     
     return jsonify({'amount':amount, 'status':200})
+
+
+@app.route('/getNameByUsername', methods=['GET'])
+def get_name_by_username():
+    username = request.args.get('username')
+    print(username)
+    user_coll = db['user']
+
+    # Check if the user exists
+    query = {'username':username}
+    user = user_coll.find_one(query)
+    if user is None:
+        return jsonify({'message':'ERROR: User was not found.', 'status':404})
+    
+    return jsonify({'name':user['name'], 'surname':user['surname'], 'status':200})
 
 
 
@@ -246,6 +261,24 @@ def get_books():
 
     for book in book_coll.find():
         books.append(book)
+    
+    return jsonify({'books':books, 'status':200})
+
+
+@app.route('/getPopularBooks', methods=['GET'])
+def get_popular_books():
+    books = []
+
+    book_coll = db['book']
+
+    # Check if no book is available
+    if book_coll.find() is None:
+        return jsonify({'books':[], 'status':201})
+
+    for book in book_coll.find():
+        books.append(book)
+    
+    books = sorted(books, key=lambda x: x['ratings_count'], reverse=True)
     
     return jsonify({'books':books, 'status':200})
 

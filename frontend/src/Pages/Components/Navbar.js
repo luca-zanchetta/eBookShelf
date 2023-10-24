@@ -5,17 +5,44 @@ import books from '../../Icons/books.png';
 import settings from '../../Icons/settings.png';
 import logout from '../../Icons/logout.png';
 import dashboard from '../../Icons/dashboard.png';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { Screens } from '../Homepage';
 
-const loggedIn = localStorage.getItem('LoggedUser')
+const endpointGetNameByUsername = 'http://localhost:5000/getNameByUsername';
 
 function Navbar({OnNavigatorClick}) {
+    const loggedIn = localStorage.getItem('LoggedUser');
     const [currentDisplay,setDisplay] = useState(Screens.Store);
+    const [name, setName] = useState("");
+    const [surname, setSurname] = useState("");
     const navigate = useNavigate();
 
-    
+    const show_data = async(event) => {
+        const response = await axios
+        .get(endpointGetNameByUsername, {
+            params: {
+                username: loggedIn,
+            },
+        })
+        .catch(function (error) {
+          if (error.response) {
+            // Print error data
+            console.log("Data: " + error.response.data);
+            console.log("Status: " + error.response.status);
+            console.log("Headers: " + error.response.headers);
+          }
+        });
+
+        if(response.data.status === 200) {
+            setName(response.data.name);
+            setSurname(response.data.surname);
+        }
+        else if(response.data.status === 404) {
+            console.log(response.data.message);
+        }
+    }
 
     const OnClick = event => {
         var display = 0
@@ -43,6 +70,10 @@ function Navbar({OnNavigatorClick}) {
         }
     }
 
+    useEffect(() => {
+        show_data();
+    }, []);
+
     return(
         <div className='Container'>
             <h1>
@@ -51,7 +82,7 @@ function Navbar({OnNavigatorClick}) {
             <div className='ProfileContainer'>
                 <img src={profile}></img>
                 <h2>
-                    Nome Utente
+                    {name} {surname}
                 </h2>
                 <h4>
                     @{loggedIn}

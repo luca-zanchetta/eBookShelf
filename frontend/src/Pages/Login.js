@@ -55,12 +55,12 @@ function Login() {
               });
     
             // If the login has been successfully performed, then redirect the user to the homepage.
-            if (response.status === 200) {
+            if (response.data.status === 200) {
                 localStorage.setItem("LoggedUser", username); // Set a session variable
                 navigate('/homepage');
                 window.location.replace(window.location.href);
             }
-            else if (response.status === 400 || response.status === 404) {
+            else if (response.data.status === 400 || response.data.status === 404) {
                 SetInvPs(LoginResult.wrongContent);
             }
           } 
@@ -91,14 +91,14 @@ function Login() {
                             </h4>
                         </div>
                         {
-                            ((invalidUs == LoginResult.invalidField || invalidUs == LoginResult.wrongContent)
+                            ((invalidUs === LoginResult.invalidField || invalidUs === LoginResult.wrongContent)
                             && <input type='text' id='username' className='InvalidInput'></input>)
                             ||
-                           ( invalidUs == LoginResult.correctField && <input type='text' id='username'></input>)
+                           ( invalidUs === LoginResult.correctField && <input type='text' id='username'></input>)
                         }
                         <div className='InputLabels'>
-                            {invalidUs == LoginResult.invalidField && <h4 className="invalidContentMessage">Invalid content!</h4>}
-                            {invalidUs == LoginResult.wrongContent && <h4 className="invalidContentMessage">Wrong username!</h4>}       
+                            {invalidUs === LoginResult.invalidField && <h4 className="invalidContentMessage">Invalid content!</h4>}
+                            {invalidUs === LoginResult.wrongContent && <h4 className="invalidContentMessage">Wrong username!</h4>}       
                         </div>
                     </div>
                     <div className='InputForms'>
@@ -118,14 +118,14 @@ function Login() {
                             </h4>
                         </div>
                         {
-                            ((invalidPs == LoginResult.invalidField || invalidPs == LoginResult.wrongContent)
+                            ((invalidPs === LoginResult.invalidField || invalidPs === LoginResult.wrongContent)
                             && <input type='password' id='password' className='InvalidInput'></input>)
                             ||
-                           ( invalidPs == LoginResult.correctField && <input type='password' id='password'></input>)
+                           ( invalidPs === LoginResult.correctField && <input type='password' id='password'></input>)
                         }
                         <div className='InputLabels'>
-                            {invalidPs == LoginResult.invalidField && <h4 className="invalidContentMessage">Invalid content!</h4>}
-                            {invalidPs == LoginResult.wrongContent &&<h4 className="invalidContentMessage">Wrong password!</h4>}
+                            {invalidPs === LoginResult.invalidField && <h4 className="invalidContentMessage">Invalid content!</h4>}
+                            {invalidPs === LoginResult.wrongContent &&<h4 className="invalidContentMessage">Wrong password!</h4>}
                         </div>
                     </div>
                     <input type='button' value="Login"  onClick={SubmitLogin}></input>
