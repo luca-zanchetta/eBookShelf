@@ -1,3 +1,4 @@
+import axios from 'axios';
 import '../../Css/BookStore-style.css'
 import sample from '../../Icons/sample.jpg';
 import StoreDefault from './StoreDefault';
@@ -15,11 +16,6 @@ function BookStore(props) {
     var [category, setCategory] = useState("")
 
 
-    useEffect(() =>
-    {
-
-    }
-    )
 
     function SearchForBook(event) {
         //should fetch the server for a list of books
@@ -36,7 +32,7 @@ function BookStore(props) {
     return(
         <div className="StoreContainer">
             <div className="StoreTopBar">
-                <h1 onClick={ () => setStatus(StoreScreens.Store)}>
+            <h1 onClick={ () => setStatus(StoreScreens.Store)}>
                     Store
                 </h1>
                 <div className="SearchBar">

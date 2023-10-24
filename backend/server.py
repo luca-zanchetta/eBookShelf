@@ -1,6 +1,8 @@
 import pymongo
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from bson import json_util
+import json
 
 app = Flask(__name__)
 CORS(app)
@@ -256,7 +258,7 @@ def get_book():
 
     book_coll = db['book']
     query = {'ISBN':isbn}
-    book = book_coll.find_one(query)
+    book = parse_json(book_coll.find_one(query))
 
     if book is None:
         return jsonify({'message':'The book was not found!', 'status':404})
@@ -391,8 +393,27 @@ def get_books_by_name():
     
     return jsonify({'books':books, 'status':200})
 
+@app.route('/getPopularBooks', methods=['GET'])
+def getPopularBooks():
+    books = []
 
+    book_coll = db['book']
+    
+    # Check if no book is available
+    if book_coll.find() is None:
+        return jsonify({'books':[], 'status':201})
+
+    for book in book_coll.find().sort([("ratings_count",pymongo.DESCENDING),("average_rating",pymongo.DESCENDING)]).limit(4):
+        books.append(parse_json(book))
+    
+    return jsonify({'books':books, 'status':200})
+##############################################################################################################
+#utilities 
+
+def parse_json(data):
+    return json.loads(json_util.dumps(data))
 
 ##############################################################################################################
 if __name__ == "__main__":
     app.run(debug=True, host="localhost", port=5000)
+
