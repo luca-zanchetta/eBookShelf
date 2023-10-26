@@ -48,14 +48,14 @@ function Homepage() {
         <Navbar OnNavigatorClick={ChangeWindow}></Navbar>
         <hr />
         {
-          currentScreen == Screens.Store && <BookStore OnBookClick={OnBookClicked} currentScreen={currentScreen}></BookStore>
+          currentScreen === Screens.Store && <BookStore OnBookClick={OnBookClicked} currentScreen={currentScreen}></BookStore>
         }
         {
-          currentScreen == Screens.Library && <Library></Library>
+          currentScreen === Screens.Library && <Library></Library>
         }
         <BookPreview  ref={ref} book={currentDisplayingBook}></BookPreview>
         {
-          currentScreen == Screens.Dashboard && <Dashboard ref={ref} book={currentDisplayingBook}></Dashboard>
+          currentScreen === Screens.Dashboard && <Dashboard ref={ref} book={currentDisplayingBook}></Dashboard>
         }
         
       </div>

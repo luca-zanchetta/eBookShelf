@@ -1,8 +1,7 @@
 import pymongo
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from bson import json_util
-import json
+from utilities import parse_json
 
 app = Flask(__name__)
 CORS(app)
@@ -235,7 +234,6 @@ def get_total_expenses():
 @app.route('/getNameByUsername', methods=['GET'])
 def get_name_by_username():
     username = request.args.get('username')
-    print(username)
     user_coll = db['user']
 
     # Check if the user exists
@@ -263,24 +261,6 @@ def get_books():
 
     for book in book_coll.find():
         books.append(book)
-    
-    return jsonify({'books':books, 'status':200})
-
-
-@app.route('/getPopularBooks', methods=['GET'])
-def get_popular_books():
-    books = []
-
-    book_coll = db['book']
-
-    # Check if no book is available
-    if book_coll.find() is None:
-        return jsonify({'books':[], 'status':201})
-
-    for book in book_coll.find():
-        books.append(book)
-    
-    books = sorted(books, key=lambda x: x['ratings_count'], reverse=True)
     
     return jsonify({'books':books, 'status':200})
 
@@ -326,15 +306,12 @@ def buy_book():
     
     # Buy the book
     transaction_coll = db['transaction']
-    code = 0
-    if transaction_coll.find() is None:
-        code = 1
-    else:
-        transactions = transaction_coll.find()
-        last_transaction = transactions[0]
-        for t in transactions:
-            last_transaction = t
+    code = 1
+    for t in transaction_coll.find():
+        transactions.append(t)
 
+    if len(transactions) > 0:
+        last_transaction = transactions[-1]
         code = last_transaction['code'] + 1
     
     # Create new transaction    
@@ -360,14 +337,17 @@ def buy_book():
 @app.route('/getBoughtBooks', methods=['GET'])
 def get_bought_books():
     username = request.args.get('username')
+    transactions = []
     books = []
 
     transaction_coll = db['transaction']
     book_coll = db['book']
 
     query = {'user':username}
-    transactions = transaction_coll.find(query)
-    if transactions is None:
+    for x in transaction_coll.find(query):
+        transactions.append(x)
+
+    if len(transactions) == 0:
         return jsonify({'books':[], 'status':201})
     
     for t in transactions:
@@ -377,6 +357,7 @@ def get_bought_books():
         if book is None:
             return jsonify({'message':'ERROR: The book was not found.', 'status':500})
         
+        book['_id'] = str(book['_id'])
         books.append(book)
     
     if len(books) == 0:
@@ -413,18 +394,74 @@ def get_books_by_category():
     return jsonify({'books':books, 'status':200})
 
 
-@app.route('/getBooksByName', methods=['GET'])
-def get_books_by_name():
+@app.route('/getAllBooksByName', methods=['GET'])
+def get_all_books_by_name():
     name = request.args.get('name')
     books = []
     regex = f".*\\b{name}\\b.*"
     
     book_coll = db['book']
-    books = book_coll.find({'name':{'$regex':regex}})
-    if books is None:
+    for book in book_coll.find({'name':{'$regex':regex}}):
+        books.append(book)
+    
+    if len(books) == 0:
         return jsonify({'books':[], 'status':201})
     
     return jsonify({'books':books, 'status':200})
+
+
+@app.route('/getBoughtBooksByName', methods=['GET'])
+def get_bought_books_by_name():
+    username = request.args.get('username')
+    name = request.args.get('name')
+    regex = f".*\\b{name}\\b.*"
+
+    transactions = []
+    bought_books = []
+    books = []
+    return_books = []
+
+    transaction_coll = db['transaction']
+    book_coll = db['book']
+
+    query = {'user':username}
+    for x in transaction_coll.find(query):
+        transactions.append(x)
+
+    if len(transactions) == 0:
+        return jsonify({'books':[], 'status':201})
+    
+    for t in transactions:
+        isbn = t['book']
+        query = {'ISBN':isbn}
+        book = book_coll.find_one(query)
+        if book is None:
+            return jsonify({'message':'ERROR: The book was not found.', 'status':500})
+        
+        book['_id'] = str(book['_id'])
+        bought_books.append(book)
+    
+    if len(bought_books) == 0:
+        return jsonify({'books':[], 'status':201})
+    if name == '':
+        return jsonify({'books':bought_books, 'status':200})
+    
+
+    for book in book_coll.find({'title':{'$regex':regex}}):
+        books.append(book)
+    if len(books) == 0:
+        return jsonify({'books':[], 'status':201})
+    
+    for book in books:
+        if book in bought_books:
+            print('***************************')
+            return_books.append(book)
+    if len(return_books) == 0:
+        return jsonify({'books':[], 'status':201})
+    
+
+    return jsonify({'books':return_books, 'status':200})
+
 
 @app.route('/getPopularBooks', methods=['GET'])
 def getPopularBooks():
@@ -440,13 +477,9 @@ def getPopularBooks():
         books.append(parse_json(book))
     
     return jsonify({'books':books, 'status':200})
-##############################################################################################################
-#utilities 
 
-def parse_json(data):
-    return json.loads(json_util.dumps(data))
+
 
 ##############################################################################################################
 if __name__ == "__main__":
     app.run(debug=True, host="localhost", port=5000)
-

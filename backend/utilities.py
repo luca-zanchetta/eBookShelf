@@ -1,13 +1,15 @@
 import csv
 import math
 import pymongo
+import json
+from bson import json_util
 
 client = pymongo.MongoClient('mongodb://localhost:27017/')
 db = client['ebookshelf']   # create db 'ebookshelf'
 
 def load_data():
     books = []
-    with open('./backend/books.csv', 'r', encoding='utf-8') as file:
+    with open('./books.csv', 'r', encoding='utf-8') as file:
         # Read the CSV file
         csv_reader = csv.reader(file)
 
@@ -38,3 +40,7 @@ def load_data():
         book_coll.insert_one(book_to_insert)
 
 load_data()
+
+
+def parse_json(data):
+    return json.loads(json_util.dumps(data))
