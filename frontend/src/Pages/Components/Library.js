@@ -36,30 +36,27 @@ function Library(props) {
     ,[])
 
     const handleKeyPress = (event) => {
-        if(event.key === 'Enter') {
-            console.log(event.target.value);
-            axios.get(
-                HomepageEndpoint + '/getBoughtBooksByName', {
-                    params: {
-                        username: username,
-                        name: event.target.value,
-                    },
-                }
-            ).then(function (response) {
-                if(response.data.status === 201) {
-                    // Nessun libro
-                    setBoughtBooks([]);
-                }
-                else if(response.data.status === 500) {
-                    // Internal server error
-                    alert(response.data.message);
-                }
-                else if(response.data.status === 200) {
-                    // ok
-                    setBoughtBooks(response.data.books);
-                }
-            })
-        }
+        axios.get(
+            HomepageEndpoint + '/getBoughtBooksByName', {
+                params: {
+                    username: username,
+                    name: event.target.value,
+                },
+            }
+        ).then(function (response) {
+            if(response.data.status === 201) {
+                // Nessun libro
+                setBoughtBooks([]);
+            }
+            else if(response.data.status === 500) {
+                // Internal server error
+                alert(response.data.message);
+            }
+            else if(response.data.status === 200) {
+                // ok
+                setBoughtBooks(response.data.books);
+            }
+        })
     }
 
     return(
@@ -69,7 +66,7 @@ function Library(props) {
                 My Library
             </h1>
             <div className="SearchBar">
-                <input type="text" placeholder="Find a book..." id="bookName" defaultValue={bookName} onKeyPress={handleKeyPress}></input>
+                <input type="text" placeholder="Find a book..." id="bookName" defaultValue={bookName} onChange={handleKeyPress}></input>
             </div>
         </div>  
         <div className="CenterStoreContainer" id='style-1'>

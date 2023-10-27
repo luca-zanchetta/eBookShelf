@@ -1,4 +1,5 @@
 import pymongo
+import re
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from utilities import parse_json
@@ -414,7 +415,6 @@ def get_all_books_by_name():
 def get_bought_books_by_name():
     username = request.args.get('username')
     name = request.args.get('name')
-    regex = f".*\\b{name}\\b.*"
 
     transactions = []
     bought_books = []
@@ -447,15 +447,17 @@ def get_bought_books_by_name():
         return jsonify({'books':bought_books, 'status':200})
     
 
-    for book in book_coll.find({'title':{'$regex':regex}}):
+    for book in book_coll.find({'title':{'$regex':name, "$options": "i"}}):
         books.append(book)
     if len(books) == 0:
         return jsonify({'books':[], 'status':201})
-    
+
+
     for book in books:
-        if book in bought_books:
-            print('***************************')
-            return_books.append(book)
+        for book1 in bought_books:
+            if book['title'] == book1['title']:
+                book['_id'] = str(book['_id'])
+                return_books.append(book)
     if len(return_books) == 0:
         return jsonify({'books':[], 'status':201})
     

@@ -9,7 +9,10 @@ db = client['ebookshelf']   # create db 'ebookshelf'
 
 def load_data():
     books = []
-    with open('./books.csv', 'r', encoding='utf-8') as file:
+    books_to_insert = []
+    book_titles = []
+
+    with open('./backend/books.csv', 'r', encoding='utf-8') as file:
         # Read the CSV file
         csv_reader = csv.reader(file)
 
@@ -33,13 +36,19 @@ def load_data():
                 pass
     
     book_coll = db['book']
+    
+    # Remove duplicates
     for book in books:
+        if book[2] not in book_titles:
+            book_titles.append(book[2])
+            books_to_insert.append(book)
+
+    
+    for book in books_to_insert:
         book_to_insert = {'ISBN':book[0], 'title':book[2], 'subtitle':book[3], 'authors':book[4], 'categories':book[5], \
                           'URL':book[6], 'description':book[7], 'published_year':book[8], 'average_rating':book[9], \
                           'num_pages':book[10], 'ratings_count':book[11], 'price':book[12]}
         book_coll.insert_one(book_to_insert)
-
-load_data()
 
 
 def parse_json(data):
