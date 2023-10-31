@@ -9,7 +9,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Screens } from '../Homepage';
-import axios from 'axios';
 import { HomepageEndpoint } from '../Homepage';
 
 const endpointGetNameByUsername = 'http://localhost:5000/getNameByUsername';
@@ -102,7 +101,7 @@ function Navbar({OnNavigatorClick}) {
                     @{loggedIn}
                 </h4>
                 <h4>
-                    Balance : {balance}
+                    Balance: {balance}
                 </h4>
             </div>
             <hr />
@@ -133,13 +132,13 @@ function Navbar({OnNavigatorClick}) {
             <hr />
             {/* -=================buttons=====================*/}
             <div className='ToggleMenu'>
-                <div className='ToggleEntry'>
+                {/* <div className='ToggleEntry'>
                     <input type='button' id="settings" name="settings"></input>
                     <div className='ToggleIcon'>
                         <img src={settings}></img>
                     </div>
                     <label for="settings">Settings</label>
-                </div>
+                </div> */}
                 <div className='ToggleEntry' onClick={handleLogout}>
                     <input type='button' id="logout" name="logout"></input>
                     <div className='ToggleIcon'>

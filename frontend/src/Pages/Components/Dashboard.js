@@ -149,7 +149,7 @@ function Dashboard() {
                                     <img src={book}></img>
                                 </div>
                                 <div className="StatsData">
-                                    <h4>Red books</h4>
+                                    <h4>Read books</h4>
                                     <h2>44</h2>
                                 </div>
                             </div>   
@@ -158,7 +158,7 @@ function Dashboard() {
                                     <img src={book}></img>
                                 </div>
                                 <div className="StatsData">
-                                    <h4>Diffrent genres</h4>
+                                    <h4>Different genres</h4>
                                     <h2>7</h2>
                                 </div>
                             </div>           

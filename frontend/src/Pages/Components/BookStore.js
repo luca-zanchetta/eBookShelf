@@ -14,6 +14,7 @@ function BookStore(props) {
     
     var [Status,setStatus] = useState(StoreScreens.Store)
     var [category, setCategory] = useState("")
+    const [bookName, setBookName] = useState('');
 
 
 
@@ -36,7 +37,7 @@ function BookStore(props) {
                     Store
                 </h1>
                 <div className="SearchBar">
-                    <input type="text" placeholder="Find a book" id="bookName" onKeyDown={SearchForBook}></input>
+                    <input type="text" placeholder="Find a book..." id="bookName"  onKeyDown={SearchForBook}></input>
                 </div>
             </div>
             {
