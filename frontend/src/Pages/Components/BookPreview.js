@@ -87,7 +87,7 @@ class BookPreview extends React.Component {
                         <div className="BookContent">
                             {this.state.book.description}
                         </div>
-                        <input type="button" value="See more"></input>
+                        <input type="button" value={"Buy for " + this.state.book.price +"$"}></input>
                         </>}
                     </div>
 

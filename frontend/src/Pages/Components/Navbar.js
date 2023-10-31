@@ -9,14 +9,19 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Screens } from '../Homepage';
+import axios from 'axios';
+import { HomepageEndpoint } from '../Homepage';
 
 const endpointGetNameByUsername = 'http://localhost:5000/getNameByUsername';
+
+
 
 function Navbar({OnNavigatorClick}) {
     const loggedIn = localStorage.getItem('LoggedUser');
     const [currentDisplay,setDisplay] = useState(Screens.Store);
     const [name, setName] = useState("");
     const [surname, setSurname] = useState("");
+    const [balance,SetBalance] = useState(0)
     const navigate = useNavigate();
 
     const show_data = async(event) => {
@@ -72,6 +77,15 @@ function Navbar({OnNavigatorClick}) {
 
     useEffect(() => {
         show_data();
+
+        axios.get(
+            HomepageEndpoint + '/getBalance',{ params: { username: loggedIn}}
+            
+        ).then((response) =>
+        {
+            SetBalance(response.data.balance);
+        })
+        
     }, []);
 
     return(
@@ -86,6 +100,9 @@ function Navbar({OnNavigatorClick}) {
                 </h2>
                 <h4>
                     @{loggedIn}
+                </h4>
+                <h4>
+                    Balance : {balance}
                 </h4>
             </div>
             <hr />

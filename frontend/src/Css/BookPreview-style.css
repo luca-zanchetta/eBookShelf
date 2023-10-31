@@ -88,6 +88,7 @@ h2 {
 .BookContent {
     width: -webkit-fill-available;
     padding: 5%;
+    margin-bottom: 8%;
     height: -webkit-fill-available;
     display: flex;
     text-overflow: clip;
