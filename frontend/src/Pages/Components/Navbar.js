@@ -5,17 +5,32 @@ import books from '../../Icons/books.png';
 import settings from '../../Icons/settings.png';
 import logout from '../../Icons/logout.png';
 import dashboard from '../../Icons/dashboard.png';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Screens } from '../Homepage';
+import axios from 'axios';
+import { HomepageEndpoint } from '../Homepage';
 
 const loggedIn = localStorage.getItem('LoggedUser')
 
+
+
 function Navbar({OnNavigatorClick}) {
     const [currentDisplay,setDisplay] = useState(Screens.Store);
+    const [balance,SetBalance] = useState(0)
     const navigate = useNavigate();
 
-    
+    useEffect( () => {
+        axios.get(
+            HomepageEndpoint + '/getBalance',{ params: { username: loggedIn}}
+            
+        ).then((response) =>
+        {
+            SetBalance(response.data.balance);
+        })
+        
+    }, [])
+
 
     const OnClick = event => {
         var display = 0
@@ -55,6 +70,9 @@ function Navbar({OnNavigatorClick}) {
                 </h2>
                 <h4>
                     @{loggedIn}
+                </h4>
+                <h4>
+                    Balance : {balance}
                 </h4>
             </div>
             <hr />
