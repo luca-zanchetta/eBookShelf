@@ -399,16 +399,19 @@ def get_books_by_category():
 def get_all_books_by_name():
     name = request.args.get('name')
     books = []
-    regex = f".*\\b{name}\\b.*"
-    
+    return_books = []
+
     book_coll = db['book']
-    for book in book_coll.find({'name':{'$regex':regex}}):
+    for book in book_coll.find({'title':{'$regex':name, "$options": "i"}}):
         books.append(book)
-    
     if len(books) == 0:
         return jsonify({'books':[], 'status':201})
     
-    return jsonify({'books':books, 'status':200})
+    for book in books:
+        book['_id'] = str(book['_id'])
+        return_books.append(book)
+    
+    return jsonify({'books':return_books, 'status':200})
 
 
 @app.route('/getBoughtBooksByName', methods=['GET'])
