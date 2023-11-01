@@ -86,6 +86,7 @@ def add_money():
     
     username = data['username']
     amount = data['amount']
+    amount = float(amount)
     
     if amount < 0:
         return jsonify({'message':'ERROR: The amount cannot be less than zero!', 'status':400})
@@ -352,7 +353,10 @@ def get_bought_books():
         return jsonify({'books':[], 'status':201})
     
     for t in transactions:
-        isbn = t['book']
+        try:
+            isbn = t['book']
+        except Exception:
+            continue
         query = {'ISBN':isbn}
         book = book_coll.find_one(query)
         if book is None:

@@ -2,7 +2,7 @@ import '../Css/Homepage-style.css'
 import BookPreview from './Components/BookPreview';
 import BookStore from './Components/BookStore';
 import Navbar from './Components/Navbar';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import Dashboard from './Components/Dashboard';
@@ -19,16 +19,23 @@ export const Screens = {
 const loggedIn = localStorage.getItem('LoggedUser');
 
 function Homepage() {
-  let showPreview = {
-    display: 'flex'
-  };
-  let noPreview = {
-    border: '1px solid black'
-  };
+    let showPreview = {
+      display: 'flex'
+    };
+    let noPreview = {
+      border: '1px solid black'
+    };
 
     var currentDisplayingBook = null;
     var [currentScreen,changeState] = useState(Screens.Store);
     var [ref,setRef] = useState(React.createRef())
+
+    useEffect(() => {
+      if(sessionStorage.getItem('window') === 'dashboard') {
+        changeState(Screens.Dashboard);
+        sessionStorage.setItem('window', '');
+      }
+    }, []);
     
     //page manager
     function ChangeWindow(page) {

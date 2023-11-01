@@ -4,24 +4,92 @@ import sample from '../../Icons/sample.jpg';
 import upArrow from '../../Icons/down-arrow.png';
 import downArrow from '../../Icons/up-arrow.png';
 import book from '../../Icons/book-n.png'
+import { HomepageEndpoint } from '../Homepage';
+import axios from 'axios';
 
+import { useState, useEffect } from 'react';
 
-import { useState } from 'react';
 function Dashboard() {
     const [showMoneyCharge, setShowMoney] = useState(false);
     const [timeout, SetTimerId] = useState();
+    const username = localStorage.getItem('LoggedUser');
+    const [balance, setBalance] = useState(0);
+    const [chargedMoney, setChargedMoney] = useState(0);
+    const [expenses, setExpenses] = useState(0);
 
-    function ChargeMoney(){
-        if(!showMoneyCharge){
+    async function ChargeMoney() {
+        if(!showMoneyCharge) {
             setShowMoney(true);
             clearTimeout(timeout);
             var _timeout = setTimeout(() => setShowMoney(false), 5000)
             SetTimerId(_timeout)
-        }else{
-
         }
+        else {
+            var amount = document.getElementById('money').value;
+            console.log(amount);
+
+            try {
+                const response = await axios
+                  .post(HomepageEndpoint+'/addMoney', {
+                    username,
+                    amount,
+                  });
         
+                if(response.data.status === 200) {
+                    sessionStorage.setItem('window', 'dashboard');
+                    window.location.replace(window.location.href);
+                }
+                else {
+                    alert(response.data.message);
+                }
+              } 
+              catch (error) {
+                // Request failed
+                console.log("[ERROR] Request failed: " + error);
+              }
+        }
     }
+
+    useEffect(() => {
+        
+        // Get current balance
+        axios.get(
+            HomepageEndpoint + '/getBalance',{ params: { username: username}}        
+        ).then((response) => {
+            if(response.data.status === 200) {
+                setBalance(response.data.balance);
+            }
+            else {
+                alert(response.data.message);
+            }
+        })
+
+        // Get total charged money
+        axios.get(
+            HomepageEndpoint + '/getTotalChargedMoney',
+            {params : {username : username} }
+        ).then((response) => {
+            if(response.data.status === 200 || response.data.status === 201) {
+                setChargedMoney(response.data.amount);
+            }
+            else {
+                alert(response.data.message);
+            }
+        })
+        
+        // Get total expenses
+        axios.get(
+            HomepageEndpoint + '/getTotalExpenses',
+            {params : {username : username} }
+        ).then((response) => {
+            if(response.data.status === 200 || response.data.status === 201) {
+                setExpenses(response.data.amount);
+            }
+            else {
+                alert(response.data.message);
+            }
+        })
+    }, []);
     
     return(
         <div className="Dashboard">
@@ -75,18 +143,18 @@ function Dashboard() {
                         <div className='CreditDisplay'>
                         <div>
                             <h2>Your balance</h2>
-                            <h2 id="balance">22$</h2>
+                            <h2 id="balance">{balance}$</h2>
                             <div className='Movements'>
                                 <div className='Movement'>
                                     <img src={upArrow} id="entries"></img>
                                     <h3>
-                                        100$
+                                        {chargedMoney}$
                                     </h3>
                                 </div>
                                 <div className='Movement'>
                                     <img src={downArrow} id="expenses"></img>
                                     <h3>
-                                        100$
+                                        {expenses}$
                                     </h3>
                                 </div>
                             </div>

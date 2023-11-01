@@ -101,7 +101,7 @@ function Navbar({OnNavigatorClick}) {
                     @{loggedIn}
                 </h4>
                 <h4>
-                    Balance: {balance}
+                    Balance: {balance}$
                 </h4>
             </div>
             <hr />
