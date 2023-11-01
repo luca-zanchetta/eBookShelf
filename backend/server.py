@@ -484,6 +484,36 @@ def getPopularBooks():
     return jsonify({'books':books, 'status':200})
 
 
+@app.route('/getFirstCategories', methods=['GET'])
+def get_five_categories():
+    categories = []
+    urls = []
+
+    book_coll = db['book']
+    # Check if no category is available
+    if book_coll.find() is None:
+        return jsonify({'categories':[], 'urls':[], 'status':201})
+    
+    
+    # I select the first five distinct SINGLE categories. Indeed, a book can belong to more than one category
+    i = 0
+    for book in book_coll.find():
+        if book['categories'] not in categories and i <= 4:
+            if ',' not in book['categories']:
+                categories.append(book['categories'])
+                urls.append(book['URL'])
+                i+=1
+            elif ',' in book['categories']:
+                subcategories = book['categories'].split(', ')
+                for elem in subcategories:
+                    if i <= 4:
+                        categories.append(elem)
+                        urls.append(book['URL'])
+                        i+=1
+    
+    return jsonify({'categories':categories, 'urls':urls, 'status':200})
+
+
 
 ##############################################################################################################
 if __name__ == "__main__":
