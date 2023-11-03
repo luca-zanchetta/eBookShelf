@@ -35,6 +35,10 @@ function Homepage() {
         changeState(Screens.Dashboard);
         sessionStorage.setItem('window', '');
       }
+      else if(sessionStorage.getItem('window') === 'library') {
+        changeState(Screens.Library);
+        sessionStorage.setItem('window', '');
+      }
     }, []);
     
     //page manager

@@ -26,7 +26,6 @@ function Dashboard() {
         }
         else {
             var amount = document.getElementById('money').value;
-            console.log(amount);
 
             try {
                 const response = await axios
@@ -143,18 +142,18 @@ function Dashboard() {
                         <div className='CreditDisplay'>
                         <div>
                             <h2>Your balance</h2>
-                            <h2 id="balance">{balance}$</h2>
+                            <h2 id="balance">{balance.toFixed(2)}$</h2>
                             <div className='Movements'>
                                 <div className='Movement'>
                                     <img src={upArrow} id="entries"></img>
                                     <h3>
-                                        {chargedMoney}$
+                                        {chargedMoney.toFixed(2)}$
                                     </h3>
                                 </div>
                                 <div className='Movement'>
                                     <img src={downArrow} id="expenses"></img>
                                     <h3>
-                                        {expenses}$
+                                        {expenses.toFixed(2)}$
                                     </h3>
                                 </div>
                             </div>

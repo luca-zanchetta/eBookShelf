@@ -83,6 +83,7 @@ def login():
 @app.route('/addMoney', methods=['POST'])
 def add_money():
     data = request.get_json()
+    transactions = []
     
     username = data['username']
     amount = data['amount']
@@ -104,15 +105,12 @@ def add_money():
 
     # Create an income transaction
     transaction_coll = db['transaction']
-    code = 0
-    if transaction_coll.find() is None:
-        code = 1
-    else:
-        transactions = transaction_coll.find()
-        last_transaction = transactions[0]
-        for t in transactions:
-            last_transaction = t
-
+    
+    code = 1
+    for tran in transaction_coll.find():
+        transactions.append(tran)
+    if len(transactions) > 0:
+        last_transaction = transactions[-1]
         code = last_transaction['code'] + 1
     
     # Create new transaction    
@@ -221,12 +219,13 @@ def get_total_expenses():
     if user is None:
         return jsonify({'message':'ERROR: User was not found.', 'status':404})
     
-    query = {'username':username}
+    query = {'user':username}
     transactions = transaction_coll.find(query)
     if transactions is None:
         return jsonify({'amount':amount, 'status':201})
     
     for transaction in transactions:
+        print(transaction)
         if transaction['amount'] < 0:
             amount += transaction['amount']
     
@@ -315,6 +314,13 @@ def buy_book():
     if len(transactions) > 0:
         last_transaction = transactions[-1]
         code = last_transaction['code'] + 1
+
+    for tran in transactions:
+        try:
+            if tran['book'] == isbn:
+                return jsonify({'message':'ERROR: You have already bought this book!', 'status':402})
+        except Exception:
+            pass
     
     # Create new transaction    
     amount = book['price']

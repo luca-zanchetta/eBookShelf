@@ -9,6 +9,7 @@ import axios from 'axios';
 import { Screens } from '../Homepage';
 import { HomepageEndpoint } from '../Homepage';
 
+const username = localStorage.getItem('LoggedUser');
 
 class BookPreview extends React.Component {
 
@@ -39,8 +40,27 @@ class BookPreview extends React.Component {
         var response = await axios.get(
             HomepageEndpoint + '/getBookByISBN',{ params: { isbn: book}}
         )
-        console.log(response)
         this.setState(response.data);
+    }
+
+    async Buy(isbn) {
+        try {
+            const response = await axios
+              .post(HomepageEndpoint+'/buyBook', {
+                username,
+                isbn,
+              });
+            
+            alert(response.data.message);
+            if(response.data.status === 200) {
+                sessionStorage.setItem('window', 'library');
+            }
+            window.location.replace(window.location.href);
+          } 
+          catch (error) {
+            // Request failed
+            console.log("[ERROR] Request failed: " + error);
+          }
     }
 
     render() {
@@ -87,7 +107,7 @@ class BookPreview extends React.Component {
                         <div className="BookContent">
                             {this.state.book.description}
                         </div>
-                        <input type="button" value={"Buy for " + this.state.book.price +"$"}></input>
+                        <input type="button" id='buy' value={"Buy for " + this.state.book.price +"$"} onClick={() => this.Buy(this.state.book.ISBN)}></input>
                         </>}
                     </div>
 
