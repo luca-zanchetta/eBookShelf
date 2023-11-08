@@ -16,6 +16,7 @@ function Dashboard() {
     const [balance, setBalance] = useState(0);
     const [chargedMoney, setChargedMoney] = useState(0);
     const [expenses, setExpenses] = useState(0);
+    const [transactions, setTransactions] = useState([])
 
     async function ChargeMoney() {
         if(!showMoneyCharge) {
@@ -57,6 +58,18 @@ function Dashboard() {
         ).then((response) => {
             if(response.data.status === 200) {
                 setBalance(response.data.balance);
+            }
+            else {
+                alert(response.data.message);
+            }
+        })
+
+        axios.get(
+            HomepageEndpoint + '/getTransactions',{ params: { username: username}}        
+        ).then((response) => {
+            if(response.data.status === 200) {
+                setTransactions(response.data.t);
+                console.log(response.data.t);
             }
             else {
                 alert(response.data.message);

@@ -3,6 +3,7 @@ import re
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from utilities import parse_json
+from datetime import datetime
 
 app = Flask(__name__)
 CORS(app)
@@ -114,7 +115,7 @@ def add_money():
         code = last_transaction['code'] + 1
     
     # Create new transaction    
-    new_transaction = {'code':code, 'amount':amount, 'user':username}
+    new_transaction = {'code':code, 'amount':amount, 'user':username, 'date':datetime.today().strftime('%Y-%m-%d')}
     tmp = transaction_coll.insert_one(new_transaction)
     if tmp is None:
         return jsonify({'message':'ERROR: charge not completed.', 'status':501})
@@ -324,7 +325,7 @@ def buy_book():
     
     # Create new transaction    
     amount = book['price']
-    new_transaction = {'code':code, 'amount':-amount, 'user':username, 'book':isbn}
+    new_transaction = {'code':code, 'amount':-amount, 'user':username, 'book':isbn, 'date':datetime.today().strftime('%Y-%m-%d')}
     tmp = transaction_coll.insert_one(new_transaction)
     if tmp is None:
         return jsonify({'message':'ERROR: purchase not completed.', 'status':501})
@@ -522,6 +523,25 @@ def get_five_categories():
                         i+=1
     
     return jsonify({'categories':categories, 'urls':urls, 'status':200})
+
+
+@app.route('/getTransactions', methods=['GET'])
+def getTransactions():
+    username = request.args.get('username')
+    transactions = db['transaction']
+
+    trans = []
+    query = {'user':username}
+
+    if transactions.find(query) is None:
+        return jsonify({'transactions':[], 'status':201})
+
+    for t in transactions.find(query).limit(6):   
+        t['_id'] = str(t['_id'])
+        trans.append(parse_json(t))
+
+    return jsonify({'transactions':trans, 'status':200})
+
 
 
 
