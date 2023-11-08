@@ -17,6 +17,9 @@ function Dashboard() {
     const [chargedMoney, setChargedMoney] = useState(0);
     const [expenses, setExpenses] = useState(0);
     const [transactions, setTransactions] = useState([])
+    const [readBooks, setReadBooks] = useState(0)
+    const [genres, setGenres] = useState(0)
+    const [stats,SetStats] = useState([])
 
     async function ChargeMoney() {
         if(!showMoneyCharge) {
@@ -64,17 +67,17 @@ function Dashboard() {
             }
         })
 
-        axios.get(
-            HomepageEndpoint + '/getTransactions',{ params: { username: username}}        
-        ).then((response) => {
-            if(response.data.status === 200) {
-                setTransactions(response.data.t);
-                console.log(response.data.t);
-            }
-            else {
-                alert(response.data.message);
-            }
-        })
+        // axios.get(
+        //     HomepageEndpoint + '/getTransactions',{ params: { username: username}}        
+        // ).then((response) => {
+        //     if(response.data.status === 200) {
+        //         setTransactions(response.data.t);
+        //         console.log(response.data.t);
+        //     }
+        //     else {
+        //         alert(response.data.message);
+        //     }
+        // })
 
         // Get total charged money
         axios.get(
@@ -83,11 +86,37 @@ function Dashboard() {
         ).then((response) => {
             if(response.data.status === 200 || response.data.status === 201) {
                 setChargedMoney(response.data.amount);
+
             }
             else {
                 alert(response.data.message);
             }
         })
+        
+        axios.get(
+            HomepageEndpoint + '/getBoughtBooks',
+            {params : {username : username} }
+        ).then((response) => {
+            if(response.data.status === 200 || response.data.status === 201) {
+                setReadBooks(response.data.books.length);
+                var _genres = []
+                var _stats = []
+                response.data.books.forEach(element => {
+                    if(!_genres.includes(element.categories))
+                        _genres.push(element.categories)
+                    if(!_stats[element.categories])
+                        _stats[element.categories] = 1
+                    else
+                        _stats[element.categories]++
+                });
+                setGenres(_genres.length);
+                _stats.sort((a,b) => { return a[1] - b[1] })       
+            }
+            else {
+                alert(response.data.message);
+            }
+        })
+
         
         // Get total expenses
         axios.get(
@@ -200,27 +229,20 @@ function Dashboard() {
                         <div className="ProfileRecapLeft">
                             <h2>Your Stats</h2>
                             <div className="ProfileRecapGenres">
-                                <div className="ProfileRecapGenresEntry">
-                                    <h4>Fantasy</h4>
-                                    <div className="ProgressBar">
-                                        <div style={{width:'100%'}}></div>
-                                    </div>
-                                    <h4>44 books</h4>
-                                </div>
-                                <div className="ProfileRecapGenresEntry">
-                                    <h4>Fantasy</h4>
-                                    <div className="ProgressBar">
-                                        <div style={{width:'25%'}}></div>
-                                    </div>
-                                    <h4>44 books</h4>
-                                </div>
-                                <div className="ProfileRecapGenresEntry">
-                                    <h4>Fantasy</h4>
-                                    <div className="ProgressBar">
-                                        <div style={{width:'20%'}}></div>
-                                    </div>
-                                    <h4>44 books</h4>
-                                </div>
+                            {
+                                stats.forEach((value) => {      
+                                    var width = (value[1]/(stats[0])[1])*100
+                                    return(
+                                        <div className="ProfileRecapGenresEntry">
+                                            <h4>{value[0]}</h4>
+                                            <div className="ProgressBar">
+                                                <div style={{width:width}}></div>
+                                            </div>
+                                            <h4>{value[1]}</h4>
+                                        </div>
+                                    )
+                                })
+                            }
                             </div>
                         </div>
                         <div className="Stats">
@@ -230,7 +252,7 @@ function Dashboard() {
                                 </div>
                                 <div className="StatsData">
                                     <h4>Read books</h4>
-                                    <h2>44</h2>
+                                    <h2>{readBooks}</h2>
                                 </div>
                             </div>   
                             <div className="StatsEntry">
@@ -239,7 +261,7 @@ function Dashboard() {
                                 </div>
                                 <div className="StatsData">
                                     <h4>Different genres</h4>
-                                    <h2>7</h2>
+                                    <h2>{genres}</h2>
                                 </div>
                             </div>           
                         </div>
