@@ -110,7 +110,7 @@
     flex-direction: column;
     height: min-content;
     align-items: center;
-    width:  17.5%;
+    margin-left: 5%;
     border-radius:  8px;
     background: linear-gradient(110deg,  rgb(120,70,180) 70%,  #8b61bf 70%);
     color: white;
@@ -148,6 +148,7 @@
     border-radius: 50%;
 }
 .Movement > h3 {
+    font-size: 1.4vw;
     width: 70%;
     color: black;
     margin: 0;
@@ -167,8 +168,8 @@
     display: flex;
     width: -webkit-fill-available;
     justify-content: center;
-    margin: 5% 0% 5% 0%;
-    font-size: 50px;
+    margin: 0;
+    font-size: 5vw;
 }
 
 .CreditDisplay > input[type="text"]{
@@ -239,14 +240,17 @@
     flex-direction: row;
     width: 100%;
     justify-content: space-between;
+    align-items: center;
     padding: 1%;
     margin: 1% 0 1% 0%;
 }
 
 .TransactionHistoryEntry > h4 {
     margin: 0;
+    width: 33%;
+    text-wrap: wrap;
     font-weight: bold;
-    white-space: nowrap;
+   
     margin-right: 4%;
 }
 
@@ -261,6 +265,7 @@
 .Plus {
     color: rgb(0,219,187);
     margin: 0;
+    text-align: right;
     white-space: nowrap;
 }
 
@@ -302,20 +307,33 @@
     display: flex;
     justify-content: center;
     margin-bottom: 2%;
+    align-items: center;
 }
 
 .ProfileRecapGenresEntry > h4 {
+    padding-right: 5%;
+    text-align: right;
+    justify-content: flex-start;
+    text-wrap: wrap;
     margin: 0;
     width: 30%;
     display: flex;
-    justify-content: center;
+}
+
+.ProfileRecapGenresEntry > h4+.ProgressBar+h4 {
+    text-align: right;
+    justify-content: flex-end;
+    margin: 0;
+    width: 30%;
+    display: flex;
 }
 
 .ProgressBar {
     display: flex;
     border-radius: 20px;
     background-color: white;
-    width: 33%;
+    width:-webkit-fill-available;
+    height: 1vw;
 }
 
 .ProgressBar > div {

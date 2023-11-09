@@ -170,7 +170,7 @@ function Dashboard() {
                             suggBook.map( (value) => {
                                 return(
                                     <div className='SuggestedBooksEntry'>
-                                        <img src={value.URL} className="SuggestedBookImage"></img>
+                                        <img src={value.URL == ""? sample:value.URL} className="SuggestedBookImage"></img>
                                         <div className='SuggestedBooksEntryText'>
                                             <h3>{value.title}</h3>
                                             <h4>{value.authors}</h4>
@@ -229,7 +229,7 @@ function Dashboard() {
                                         }
                                         <h4>{value.date}</h4>
                                         {
-                                            value.amount > 0 && <h4 className="Plus">{value.amount}</h4>
+                                            value.amount > 0 && <h4 className="Plus">+{value.amount}</h4>
                                         }
                                         {
                                             value.amount < 0 && <h4 className="Minus">{value.amount}</h4>

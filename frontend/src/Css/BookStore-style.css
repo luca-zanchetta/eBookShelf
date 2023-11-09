@@ -2,15 +2,15 @@
     display: flex;
     flex-direction: column;
     width: -webkit-fill-available;
-    height: -webkit-fill-available;
+    height: 100%;
 }
 
 .CenterStoreContainer {
     display: flex;
-    padding: 2%;
     flex-direction: column;
     width: -webkit-fill-available;
-    height: -webkit-fill-available;
+    height: max-content;
+    overflow-y: auto;
 }
 
 .StoreTopBar {
@@ -77,6 +77,12 @@
     margin: 0;
     color: rgb(114,62,176);
     font-weight: none;
+    cursor: pointer;
+}
+
+.PopularCategoryTopBar > h3:hover {
+    text-decoration: underline;
+    text-decoration-color:rgb(114,62,176);
 }
 
 .BookCategoryList {
@@ -101,15 +107,15 @@
     box-shadow: 0 10px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19) !important;
     position: relative;
     display: flex;
-    max-width: 50%;
+    max-width: 35%;
     margin: 0% 5% 0% 5% ;
-    transition:all 1000ms;
+    transition:all 350ms;
     transition-timing-function: ease-out;
 }
 
 
-.BookListEntry > img:hover {
-    min-width: 50%;
+.BookListEntry > img:hover  {
+    max-width: 38%;
     transition:all 1000ms;
     transition-timing-function: ease-out;
 }

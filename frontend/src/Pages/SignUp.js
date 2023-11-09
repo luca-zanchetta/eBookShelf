@@ -19,6 +19,7 @@ function SignUp(){
     const navigate = useNavigate();
 
     const [showPs, SetShow] = useState(false);
+    const [showCopyPs, SetCopyShow] = useState(false);
     const [invalidPs, SetInvPs] = useState(LoginResult.correctField);
     const [invalidUs, SetInvUs] = useState(LoginResult.correctField);
     const [invalidName, SetInvName] = useState(LoginResult.correctField);
@@ -26,13 +27,26 @@ function SignUp(){
     const [invalidCopyPs, SetInvCopyPs] = useState(LoginResult.correctField);
 
     function ToggleShow() {
-        var x = document.getElementById("password");
+
+        var x = document.getElementById("password")
         if (x.type === "password") {
             x.type = "text";
             SetShow(true)
         } else {
             x.type = "password";
             SetShow(false)
+        }
+    }
+
+    function ToggleCopyShow() {
+
+        var x = document.getElementById("copyPassword")
+        if (x.type === "password") {
+            x.type = "text";
+            SetCopyShow(true)
+        } else {
+            x.type = "password";
+            SetCopyShow(false)
         }
     }
 
@@ -54,8 +68,14 @@ function SignUp(){
             checkPassed = false
         }
 
-        if(!copyPassword || copyPassword !== password){
-            SetInvPs(LoginResult.invalidField);
+        if(!copyPassword){
+            SetInvCopyPs(LoginResult.invalidField);
+            checkPassed = false
+        }
+
+        if(copyPassword != password) {
+            SetInvCopyPs(LoginResult.wrongContent);
+            SetInvPs(LoginResult.wrongContent);
             checkPassed = false
         }
 
@@ -195,11 +215,11 @@ function SignUp(){
                                 confirm password
                             </h3>
                             <h4>
-                                <span id='showPassword' onClick={ToggleShow}>
+                                <span id='showPassword' onClick={ToggleCopyShow}>
                                     {
-                                        !showPs && <img src={show}></img>
+                                        !showCopyPs && <img src={show}></img>
                                         ||
-                                        showPs && <img src={hide}></img>
+                                        showCopyPs && <img src={hide}></img>
                                     }
                                 </span>
                                 show
@@ -207,7 +227,7 @@ function SignUp(){
                         </div>
                         {
                             ((invalidCopyPs === LoginResult.invalidField || invalidCopyPs === LoginResult.wrongContent)
-                            && <input type='password' id='password' className='InvalidInput'></input>)
+                            && <input type='password' id='copyPassword' className='InvalidInput'></input>)
                             ||
                            ( invalidCopyPs === LoginResult.correctField && <input type='password' id='copyPassword'></input>)
                         }

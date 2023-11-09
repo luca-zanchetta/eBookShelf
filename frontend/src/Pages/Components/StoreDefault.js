@@ -32,7 +32,6 @@ function StoreDefault(props) {
         <div className="PopularContainer">
             <div className="PopularCategoryTopBar">
                 <h2>Popular Now</h2>
-                <h3>View all</h3>
             </div>
             <div className="BookCategoryList">
                 {

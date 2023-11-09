@@ -67,7 +67,7 @@ function BookStore(props) {
             {
                 Status == StoreScreens.Store &&  <StoreDefault onBookClick={props.OnBookClick} onCategoryClick= {onCategoryClick}></StoreDefault>
                 ||
-                Status == StoreScreens.ListView &&  <StoreListView currentCategory={category} books={books}></StoreListView>
+                Status == StoreScreens.ListView &&  <StoreListView currentCategory={category} books={books} onBookClick={props.OnBookClick}></StoreListView>
             }
         </div>
     );
