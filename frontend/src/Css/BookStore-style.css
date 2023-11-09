@@ -85,6 +85,7 @@
     flex-direction: row;
     align-items: center;
     max-height: 100%;
+    justify-content: space-around;
 }
 
 .BookListEntry {
@@ -92,6 +93,8 @@
     flex-direction: column;
     align-items: center;
     width: 25%;
+    transition: all 1000ms;
+    transition-timing-function: ease-out;
 }
 
 .BookListEntry > img {
@@ -100,13 +103,15 @@
     display: flex;
     max-width: 50%;
     margin: 0% 5% 0% 5% ;
-    transition: all 500ms;
+    transition:all 1000ms;
     transition-timing-function: ease-out;
 }
 
 
 .BookListEntry > img:hover {
-    max-width: 52%;
+    min-width: 50%;
+    transition:all 1000ms;
+    transition-timing-function: ease-out;
 }
 
 .BookListEntry > h4 {
@@ -138,7 +143,6 @@
     align-items: center;
     width: 10%;
     height: -webkit-fill-available;
-    padding: 5%;
 }
 
 .CategoryListEntry > img {

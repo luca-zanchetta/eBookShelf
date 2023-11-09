@@ -20,6 +20,7 @@ function Dashboard() {
     const [readBooks, setReadBooks] = useState(0)
     const [genres, setGenres] = useState(0)
     const [stats,SetStats] = useState([])
+    const [suggBook,SetSuggBook] = useState([])
 
     async function ChargeMoney() {
         if(!showMoneyCharge) {
@@ -67,17 +68,17 @@ function Dashboard() {
             }
         })
 
-        // axios.get(
-        //     HomepageEndpoint + '/getTransactions',{ params: { username: username}}        
-        // ).then((response) => {
-        //     if(response.data.status === 200) {
-        //         setTransactions(response.data.t);
-        //         console.log(response.data.t);
-        //     }
-        //     else {
-        //         alert(response.data.message);
-        //     }
-        // })
+        axios.get(
+            HomepageEndpoint + '/getTransactions',{ params: { username: username}}        
+        ).then((response) => {
+            if(response.data.status === 200) {
+                setTransactions(response.data.transactions);
+                console.log(response.data.transactions);
+            }
+            else {
+                alert(response.data.message);
+            }
+        })
 
         // Get total charged money
         axios.get(
@@ -86,7 +87,20 @@ function Dashboard() {
         ).then((response) => {
             if(response.data.status === 200 || response.data.status === 201) {
                 setChargedMoney(response.data.amount);
+                
+            }
+            else {
+                alert(response.data.message);
+            }
+        })
 
+        axios.get(
+            HomepageEndpoint + '/getSuggestedBooks',
+            {params : {username : username} }
+        ).then((response) => {
+            if(response.data.status === 200 || response.data.status === 201) {
+                SetSuggBook(response.data.books);
+                console.log(response.data.books)
             }
             else {
                 alert(response.data.message);
@@ -100,7 +114,7 @@ function Dashboard() {
             if(response.data.status === 200 || response.data.status === 201) {
                 setReadBooks(response.data.books.length);
                 var _genres = []
-                var _stats = []
+                var _stats = {}
                 response.data.books.forEach(element => {
                     if(!_genres.includes(element.categories))
                         _genres.push(element.categories)
@@ -110,7 +124,16 @@ function Dashboard() {
                         _stats[element.categories]++
                 });
                 setGenres(_genres.length);
-                _stats.sort((a,b) => { return a[1] - b[1] })       
+
+                var items = Object.keys(_stats).map(function(key) {
+                    return [key, _stats[key]];
+                  });
+                  
+                  // Sort the array based on the second element
+                items.sort(function(first, second) {
+                return second[1] - first[1];
+                });                
+                SetStats(items) 
             }
             else {
                 alert(response.data.message);
@@ -143,43 +166,26 @@ function Dashboard() {
                     <h2>Suggested books</h2>
                     <div className='BlockList'>
                         <div className='SuggestedBooks'>
-                            <div className='SuggestedBooksEntry'>
-                                <img src={sample} className="SuggestedBookImage"></img>
-                                <div className='SuggestedBooksEntryText'>
-                                    <h3>Book name</h3>
-                                    <h4>Book name</h4>
-                                    <div className='BookData'>
-                                        <div>Pages </div>
-                                        <div>Readers </div>
-                                        <div>Rating </div>
+                        {
+                            suggBook.map( (value) => {
+                                return(
+                                    <div className='SuggestedBooksEntry'>
+                                        <img src={value.URL} className="SuggestedBookImage"></img>
+                                        <div className='SuggestedBooksEntryText'>
+                                            <h3>{value.title}</h3>
+                                            <h4>{value.authors}</h4>
+                                            <div className='BookData'>
+                                                <div>Pages {value.num_pages}</div>
+                                                <div>Readers {value.ratings_count}</div>
+                                                <div>Rating {value.average_rating}</div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div className='SuggestedBooksEntry'>
-                                <img src={sample} className="SuggestedBookImage"></img>
-                                <div className='SuggestedBooksEntryText'>
-                                    <h3>Book name</h3>
-                                    <h4>Book name</h4>
-                                    <div className='BookData'>
-                                        <div>Pages </div>
-                                        <div>Readers </div>
-                                        <div>Rating </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className='SuggestedBooksEntry'>
-                                <img src={sample} className="SuggestedBookImage"></img>
-                                <div className='SuggestedBooksEntryText'>
-                                    <h3>Book name</h3>
-                                    <h4>Book name</h4>
-                                    <div className='BookData'>
-                                        <div>Pages </div>
-                                        <div>Readers </div>
-                                        <div>Rating </div>
-                                    </div>
-                                </div>
-                               
-                            </div>
+                                )
+
+                            })
+                        }
+        
                         </div>
                         <div className='CreditDisplay'>
                         <div>
@@ -214,29 +220,37 @@ function Dashboard() {
                             <h2>Recent Transactions</h2>
                             <h4>view all</h4>
                         </div>
-                        <div className="TransactionHistoryEntry">
-                            <h4>The lord of the rings</h4>
-                            <h4>12/10/2023</h4>
-                            <h4 className="Minus">-200</h4>
-                        </div>
-                        <div className="TransactionHistoryEntry">
-                            <h4>Account recharge</h4>
-                            <h4>12/10/2023</h4>
-                            <h4 className="Plus">+200</h4>
-                        </div>
+                        {
+                            transactions.map((value) => {
+                                return(
+                                    <div className="TransactionHistoryEntry">
+                                        {
+                                            value.book ? <h4>{value.book}</h4> : <h4>Credit Deposit</h4>
+                                        }
+                                        <h4>{value.date}</h4>
+                                        {
+                                            value.amount > 0 && <h4 className="Plus">{value.amount}</h4>
+                                        }
+                                        {
+                                            value.amount < 0 && <h4 className="Minus">{value.amount}</h4>
+                                        } 
+                                    </div>
+                                )
+                            })
+                        }
                     </div>
                     <div className="ProfileRecap">
                         <div className="ProfileRecapLeft">
                             <h2>Your Stats</h2>
                             <div className="ProfileRecapGenres">
                             {
-                                stats.forEach((value) => {      
+                                stats.map((value) => {      
                                     var width = (value[1]/(stats[0])[1])*100
                                     return(
                                         <div className="ProfileRecapGenresEntry">
                                             <h4>{value[0]}</h4>
                                             <div className="ProgressBar">
-                                                <div style={{width:width}}></div>
+                                                <div style={{width:width + '%'}}></div>
                                             </div>
                                             <h4>{value[1]}</h4>
                                         </div>

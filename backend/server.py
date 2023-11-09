@@ -140,21 +140,6 @@ def get_balance():
     
     return jsonify({'balance':balance, 'status':200})
 
-
-@app.route('/getTransactions', methods=['GET'])
-def get_transactions():
-    username = request.args.get('username')
-
-    transaction_coll = db['transaction']
-    query = {'user':username}
-    transactions = transaction_coll.find(query)
-
-    if transactions is None:
-        return jsonify({'transactions':[], 'status':201})
-    
-    return jsonify({'transactions':transactions, 'status':200})
-
-
 @app.route('/deleteAccount', methods=['POST'])
 def delete_account():
     data = request.get_json()
@@ -529,6 +514,7 @@ def get_five_categories():
 def getTransactions():
     username = request.args.get('username')
     transactions = db['transaction']
+    books = db['book']
 
     trans = []
     query = {'user':username}
@@ -536,11 +522,42 @@ def getTransactions():
     if transactions.find(query) is None:
         return jsonify({'transactions':[], 'status':201})
 
-    for t in transactions.find(query).limit(6):   
-        t['_id'] = str(t['_id'])
+    for t in transactions.find(query).limit(5):  
+        try:
+            t['book'] = books.find_one({'ISBN' : t['book']})['title']
+        except:
+            pass
         trans.append(parse_json(t))
+        
 
     return jsonify({'transactions':trans, 'status':200})
+
+
+@app.route('/getSuggestedBooks', methods=['GET'])
+def getSuggestedBooks():
+    books = []
+    username = request.args.get('username')
+    transactions = db['transaction']
+    trans = []
+    book_coll = db['book']
+    
+    # Check if no book is available
+    if book_coll.find() is None:
+        return jsonify({'books':[], 'status':201})
+    
+    for t in transactions.find({'user':username}):  
+        try:
+            trans.append(t['book'])
+        except:
+            pass
+    
+    for book in book_coll.find().sort([("ratings_count",pymongo.DESCENDING),("average_rating",pymongo.DESCENDING)]):
+        if(book['ISBN'] not in trans):
+            books.append(parse_json(book))
+        if(len(books) == 3):
+            break
+    
+    return jsonify({'books':books, 'status':200})
 
 
 
