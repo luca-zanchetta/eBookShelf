@@ -431,14 +431,17 @@ def get_bought_books_by_name():
         return jsonify({'books':[], 'status':201})
     
     for t in transactions:
-        isbn = t['book']
-        query = {'ISBN':isbn}
-        book = book_coll.find_one(query)
-        if book is None:
-            return jsonify({'message':'ERROR: The book was not found.', 'status':500})
-        
-        book['_id'] = str(book['_id'])
-        bought_books.append(book)
+        try:
+            isbn = t['book']
+            query = {'ISBN':isbn}
+            book = book_coll.find_one(query)
+            if book is None:
+                return jsonify({'message':'ERROR: The book was not found.', 'status':500})
+            
+            book['_id'] = str(book['_id'])
+            bought_books.append(book)
+        except:
+            pass
     
     if len(bought_books) == 0:
         return jsonify({'books':[], 'status':201})
