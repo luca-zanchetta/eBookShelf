@@ -303,7 +303,7 @@ def buy_book():
 
     for tran in transactions:
         try:
-            if tran['book'] == isbn:
+            if tran['book'] == isbn and tran['user'] == username:
                 return jsonify({'message':'ERROR: You have already bought this book!', 'status':402})
         except Exception:
             pass
