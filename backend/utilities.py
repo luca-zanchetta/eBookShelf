@@ -12,7 +12,7 @@ def load_data():
     books_to_insert = []
     book_titles = []
 
-    with open('./backend/books.csv', 'r', encoding='utf-8') as file:
+    with open('./books.csv', 'r', encoding='utf-8') as file:
         # Read the CSV file
         csv_reader = csv.reader(file)
 
