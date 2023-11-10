@@ -220,7 +220,9 @@ function Dashboard() {
                             <h2>Recent Transactions</h2>
                             <h4>view all</h4>
                         </div>
-                        {
+                        {transactions.length === 0 ? (
+                            <h3 style={{marginTop: '10%'}}>You have no transaction yet.</h3>
+                        ): (
                             transactions.map((value) => {
                                 return(
                                     <div className="TransactionHistoryEntry">
@@ -237,13 +239,15 @@ function Dashboard() {
                                     </div>
                                 )
                             })
-                        }
+                        )}
                     </div>
                     <div className="ProfileRecap">
                         <div className="ProfileRecapLeft">
                             <h2>Your Stats</h2>
                             <div className="ProfileRecapGenres">
-                            {
+                            {stats.length === 0 ? (
+                                <h3 style={{marginTop: '10%'}}>Your library is empty!</h3>
+                            ) : (
                                 stats.map((value) => {      
                                     var width = (value[1]/(stats[0])[1])*100
                                     return(
@@ -256,7 +260,7 @@ function Dashboard() {
                                         </div>
                                     )
                                 })
-                            }
+                            )}
                             </div>
                         </div>
                         <div className="Stats">
