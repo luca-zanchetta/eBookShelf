@@ -54,6 +54,29 @@ function Dashboard() {
         }
     }
 
+    async function buttonClick(isbn) {
+        try {
+            const response = await axios
+              .post(HomepageEndpoint+'/buyBook', {
+                username,
+                isbn,
+              });
+            
+            alert(response.data.message);
+            if(response.data.status === 200) {
+                sessionStorage.setItem('window', 'library');
+            }
+            else {
+                sessionStorage.setItem('window', 'dashboard');
+            }
+            window.location.replace(window.location.href);
+          } 
+          catch (error) {
+            // Request failed
+            console.log("[ERROR] Request failed: " + error);
+          }
+    }
+
     useEffect(() => {
         
         // Get current balance
@@ -178,6 +201,7 @@ function Dashboard() {
                                                 <div>Pages {value.num_pages}</div>
                                                 <div>Readers {value.ratings_count}</div>
                                                 <div>Rating {value.average_rating}</div>
+                                                <input type="button" id='buy' value={"Buy for  $"+value.price} onClick={() => buttonClick(value.ISBN)}></input>
                                             </div>
                                         </div>
                                     </div>
@@ -231,7 +255,7 @@ function Dashboard() {
                                         }
                                         <h4>{value.date}</h4>
                                         {
-                                            value.amount > 0 && <h4 className="Plus">{value.amount}</h4>
+                                            value.amount > 0 && <h4 className="Plus">+{value.amount}</h4>
                                         }
                                         {
                                             value.amount < 0 && <h4 className="Minus">{value.amount}</h4>
