@@ -75,7 +75,7 @@ function Library(props) {
                 ) : (
                     <div className="ListContainer">
                         {boughtBooks.map((book) => (
-                            <div className="BookListEntry" id={book.ISBN} onClick={props.onBookClick}>
+                            <div className="BookListEntry" id={book.ISBN} onClick={props.OnBookClick}>
                                 <img src={book.URL === "" ? sample : book.URL} alt={book.title}></img>
                                 <h4>{book.title}</h4>
                                 <h5>{book.authors}</h5>

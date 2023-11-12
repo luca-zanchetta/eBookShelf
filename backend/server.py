@@ -384,8 +384,11 @@ def get_books_by_category():
 
     book_coll = db['book']
     query = {'categories':category}
-    books = book_coll.find(query)
-    if books is None:
+    for book in book_coll.find(query):
+        book['_id'] = str(book['_id'])
+        books.append(book)
+
+    if len(books) == 0:
         return jsonify({'message':'No book found for this category!', 'status':201})
     
     return jsonify({'books':books, 'status':200})

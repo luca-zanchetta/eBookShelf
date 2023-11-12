@@ -110,7 +110,7 @@
 
 .BookListEntry > img:hover {
     min-width: 50%;
-    transition:all 1000ms;
+    transition: all 1000ms;
     transition-timing-function: ease-out;
 }
 
@@ -176,4 +176,5 @@
     flex-wrap: wrap;
     width: -webkit-fill-available;
     overflow-y: auto;
+    margin-bottom: 4%;
 }
