@@ -366,15 +366,27 @@ def get_bought_books():
 @app.route('/getCategories', methods=['GET'])
 def get_categories():
     categories = []
-    book_coll = db['book']
-    categories = book_coll.distinct('categories')
-    
-    if len(categories) == 0:
-        return jsonify({'message':'ERROR: there is no data!', 'status':500})
+    urls = []
 
-    if '' in categories:
-        categories.remove('')
-    return jsonify({'categories':categories, 'status':200})
+    book_coll = db['book']
+    # Check if no category is available
+    if book_coll.find() is None:
+        return jsonify({'categories':[], 'urls':[], 'status':201})
+    
+    
+    # I select distinct SINGLE categories. Indeed, a book can belong to more than one category
+    for book in book_coll.find():
+        if book['categories'] not in categories:
+            if ',' not in book['categories']:
+                categories.append(book['categories'])
+                urls.append(book['URL'])
+            elif ',' in book['categories']:
+                subcategories = book['categories'].split(', ')
+                for elem in subcategories:
+                    categories.append(elem)
+                    urls.append(book['URL'])
+    
+    return jsonify({'categories':categories, 'urls':urls, 'status':200})
 
 
 @app.route('/getBooksByCategory', methods=['GET'])
