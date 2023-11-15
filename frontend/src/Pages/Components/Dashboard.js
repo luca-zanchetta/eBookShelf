@@ -16,11 +16,24 @@ function Dashboard() {
     const [balance, setBalance] = useState(0);
     const [chargedMoney, setChargedMoney] = useState(0);
     const [expenses, setExpenses] = useState(0);
+    const [sixTransactions, setSixTransactions] = useState([])
     const [transactions, setTransactions] = useState([])
     const [readBooks, setReadBooks] = useState(0)
     const [genres, setGenres] = useState(0)
     const [stats,SetStats] = useState([])
     const [suggBook,SetSuggBook] = useState([])
+
+    const [viewAll, setViewAll] = useState(false);
+    const [viewAllOk, setViewAllOk] = useState(false);
+
+    function toggleViewAll() {
+        if(!viewAll) {
+            setViewAll(true);
+        }
+        else {
+            setViewAll(false);
+        }
+    }
 
     async function ChargeMoney() {
         if(!showMoneyCharge) {
@@ -92,11 +105,21 @@ function Dashboard() {
         })
 
         axios.get(
+            HomepageEndpoint + '/getSixTransactions',{ params: { username: username}}        
+        ).then((response) => {
+            if(response.data.status === 200) {
+                setSixTransactions(response.data.transactions);
+            }
+            else {
+                alert(response.data.message);
+            }
+        })
+
+        axios.get(
             HomepageEndpoint + '/getTransactions',{ params: { username: username}}        
         ).then((response) => {
             if(response.data.status === 200) {
                 setTransactions(response.data.transactions);
-                console.log(response.data.transactions);
             }
             else {
                 alert(response.data.message);
@@ -123,7 +146,6 @@ function Dashboard() {
         ).then((response) => {
             if(response.data.status === 200 || response.data.status === 201) {
                 SetSuggBook(response.data.books);
-                console.log(response.data.books)
             }
             else {
                 alert(response.data.message);
@@ -242,12 +264,34 @@ function Dashboard() {
                     <div className="TransactionHistory">
                         <div className="TransactionHistoryTop">
                             <h2>Recent Transactions</h2>
-                            <h4>View all</h4>
+                            {(transactions.length > 6 && viewAll) &&
+                                <h4 onClick={toggleViewAll} style={{cursor: 'pointer'}}>View all</h4>
+                            }
+                            {(transactions.length > 6 && !viewAll) &&
+                                <h4 onClick={toggleViewAll} style={{cursor: 'pointer'}}>View six</h4>
+                            }
                         </div>
                         {transactions.length === 0 ? (
                             <h3 style={{marginTop: '10%'}}>You have no transaction yet.</h3>
                         ): (
-                            transactions.map((value) => {
+                            viewAll && sixTransactions.map((value) => {
+                                return(
+                                    <div className="TransactionHistoryEntry">
+                                        {
+                                            value.book ? <h4>{value.book}</h4> : <h4>Credit Deposit</h4>
+                                        }
+                                        <h4>{value.date}</h4>
+                                        {
+                                            value.amount > 0 && <h4 className="Plus">+{value.amount}$</h4>
+                                        }
+                                        {
+                                            value.amount < 0 && <h4 className="Minus">{value.amount}$</h4>
+                                        } 
+                                    </div>
+                                )
+                            })
+                            ||
+                            !viewAll && transactions.map((value) => {
                                 return(
                                     <div className="TransactionHistoryEntry">
                                         {

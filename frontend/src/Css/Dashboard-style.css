@@ -224,6 +224,8 @@
     min-width: 52%;
     margin: 1%;
     padding: 1%;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .TransactionHistoryTop {

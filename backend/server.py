@@ -211,7 +211,6 @@ def get_total_expenses():
         return jsonify({'amount':amount, 'status':201})
     
     for transaction in transactions:
-        print(transaction)
         if transaction['amount'] < 0:
             amount += transaction['amount']
     
@@ -528,8 +527,8 @@ def get_five_categories():
     return jsonify({'categories':categories, 'urls':urls, 'status':200})
 
 
-@app.route('/getTransactions', methods=['GET'])
-def getTransactions():
+@app.route('/getSixTransactions', methods=['GET'])
+def get_six_transactions():
     username = request.args.get('username')
     transactions = db['transaction']
     books = db['book']
@@ -540,7 +539,30 @@ def getTransactions():
     if transactions.find(query) is None:
         return jsonify({'transactions':[], 'status':201})
 
-    for t in transactions.find(query).limit(5):  
+    for t in transactions.find(query).limit(6):  
+        try:
+            t['book'] = books.find_one({'ISBN' : t['book']})['title']
+        except:
+            pass
+        trans.append(parse_json(t))
+        
+
+    return jsonify({'transactions':trans, 'status':200})
+
+
+@app.route('/getTransactions', methods=['GET'])
+def get_transactions():
+    username = request.args.get('username')
+    transactions = db['transaction']
+    books = db['book']
+
+    trans = []
+    query = {'user':username}
+
+    if transactions.find(query) is None:
+        return jsonify({'transactions':[], 'status':201})
+
+    for t in transactions.find(query):  
         try:
             t['book'] = books.find_one({'ISBN' : t['book']})['title']
         except:
