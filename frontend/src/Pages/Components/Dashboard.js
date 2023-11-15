@@ -242,7 +242,7 @@ function Dashboard() {
                     <div className="TransactionHistory">
                         <div className="TransactionHistoryTop">
                             <h2>Recent Transactions</h2>
-                            <h4>view all</h4>
+                            <h4>View all</h4>
                         </div>
                         {transactions.length === 0 ? (
                             <h3 style={{marginTop: '10%'}}>You have no transaction yet.</h3>
@@ -255,10 +255,10 @@ function Dashboard() {
                                         }
                                         <h4>{value.date}</h4>
                                         {
-                                            value.amount > 0 && <h4 className="Plus">+{value.amount}</h4>
+                                            value.amount > 0 && <h4 className="Plus">+{value.amount}$</h4>
                                         }
                                         {
-                                            value.amount < 0 && <h4 className="Minus">{value.amount}</h4>
+                                            value.amount < 0 && <h4 className="Minus">{value.amount}$</h4>
                                         } 
                                     </div>
                                 )

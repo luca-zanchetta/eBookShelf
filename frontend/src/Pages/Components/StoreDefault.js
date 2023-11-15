@@ -76,26 +76,33 @@ function StoreDefault(props) {
         <div className="CategoryContainer">
             <div className="PopularCategoryTopBar">
                 <h2>Book Categories</h2>
-                <h3 onClick={toggleViewAll} style={{cursor: 'pointer'}}>View all</h3>
+                {viewAll &&
+                    <h3 onClick={toggleViewAll} style={{cursor: 'pointer'}}>View five</h3>
+                }
+                {!viewAll &&
+                    <h3 onClick={toggleViewAll} style={{cursor: 'pointer'}}>View all</h3>
+                }
             </div>
-            <div className="BookCategoryList">
-                {(!viewAll || !viewAllOk) &&
+            {(!viewAll || !viewAllOk) &&
+                <div className="BookCategoryList"> {
                     fiveCategories.map((category, index) => (
                         <div className="CategoryListEntry" id={category} onClick={props.onCategoryClick}>
                             <h3>{category}</h3>
                             <img src={fiveURLs[index]}></img>             
                         </div>
-                    ))
-                }
-                {(viewAll && viewAllOk) &&
-                    allCategories.map((category, index) => (
-                        <div className="CategoryListEntry" id={category} onClick={props.onCategoryClick}>
-                            <h3>{category}</h3>
-                            <img src={allURLs[index]}></img>             
-                        </div>
-                    ))
-                }
-            </div>
+                    ))}
+                </div>
+            }
+            {(viewAll && viewAllOk) &&
+                <div className='ListCategoryContainer'> {
+                allCategories.map((category, index) => (
+                    <div className="CategoryListEntry" id={category} onClick={props.onCategoryClick}>
+                        <h3>{category}</h3>
+                        <img src={allURLs[index]}></img>
+                    </div>
+                ))}
+                </div>
+            }
         </div>
         </div>
     );
