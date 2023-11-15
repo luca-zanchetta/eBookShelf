@@ -10,6 +10,7 @@ import { Screens } from '../Homepage';
 import { HomepageEndpoint } from '../Homepage';
 
 const username = localStorage.getItem('LoggedUser');
+const buy = sessionStorage.getItem('buyBook');
 
 class BookPreview extends React.Component {
 
@@ -107,7 +108,9 @@ class BookPreview extends React.Component {
                         <div className="BookContent">
                             {this.state.book.description}
                         </div>
-                        <input type="button" id='buy' value={"Buy for " + this.state.book.price +"$"} onClick={() => this.Buy(this.state.book.ISBN)}></input>
+                        {sessionStorage.getItem('buyBook') !== '' &&
+                            <input type="button" id='buy' value={"Buy for " + this.state.book.price +"$"} onClick={() => this.Buy(this.state.book.ISBN)}></input>
+                        }
                         </>}
                     </div>
 

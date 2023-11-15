@@ -25,6 +25,8 @@ function StoreDefault(props) {
 
     useEffect(() =>
     {
+        sessionStorage.setItem('buyBook', 'true');
+        
         axios.get(
             HomepageEndpoint + '/getPopularBooks'
         ).then(function (response) {

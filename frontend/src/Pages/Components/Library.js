@@ -32,6 +32,8 @@ function Library(props) {
                 setBoughtBooks(response.data.books);
             }
         })
+
+        sessionStorage.setItem('buyBook', '');
     }
     ,[])
 

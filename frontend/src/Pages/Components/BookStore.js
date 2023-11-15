@@ -17,6 +17,10 @@ function BookStore(props) {
     const [bookName, setBookName] = useState('');
     const [books, setBooks] = useState([]);
 
+    useEffect(() => {
+        sessionStorage.setItem('buyBook', 'true');
+    }, []);
+
     const handleKeyPress = (event) => {
         if(event.target.value !== '') {
             setStatus(StoreScreens.ListView);
@@ -41,14 +45,6 @@ function BookStore(props) {
             setStatus(StoreScreens.Store);
         }
     }
-
-    // function SearchForBook(event) {
-    //     //should fetch the server for a list of books
-    //     if (event.keyCode === 13) {
-    //         var bookName = document.getElementById("bookName").value
-    //         setStatus(StoreScreens.ListView)
-    //     }
-    // }
 
     function onCategoryClick(event){
         setCategory(event.currentTarget.id);

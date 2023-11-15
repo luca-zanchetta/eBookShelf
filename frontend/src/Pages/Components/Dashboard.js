@@ -91,6 +91,7 @@ function Dashboard() {
     }
 
     useEffect(() => {
+        sessionStorage.setItem('buyBook', 'true');
         
         // Get current balance
         axios.get(
