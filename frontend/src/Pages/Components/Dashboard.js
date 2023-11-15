@@ -23,7 +23,7 @@ function Dashboard() {
     const [stats,SetStats] = useState([])
     const [suggBook,SetSuggBook] = useState([])
 
-    const [viewAll, setViewAll] = useState(false);
+    const [viewAll, setViewAll] = useState(true);
     const [viewAllOk, setViewAllOk] = useState(false);
 
     function toggleViewAll() {

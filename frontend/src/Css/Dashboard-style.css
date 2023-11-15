@@ -213,6 +213,7 @@
     flex-direction: row;
     width: -webkit-fill-available;
     height: -webkit-fill-available;
+    overflow-y: auto;
 }
 
 .TransactionHistory {
