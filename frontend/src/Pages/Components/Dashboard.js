@@ -16,11 +16,24 @@ function Dashboard() {
     const [balance, setBalance] = useState(0);
     const [chargedMoney, setChargedMoney] = useState(0);
     const [expenses, setExpenses] = useState(0);
+    const [sixTransactions, setSixTransactions] = useState([])
     const [transactions, setTransactions] = useState([])
     const [readBooks, setReadBooks] = useState(0)
     const [genres, setGenres] = useState(0)
     const [stats,SetStats] = useState([])
     const [suggBook,SetSuggBook] = useState([])
+
+    const [viewAll, setViewAll] = useState(true);
+    const [viewAllOk, setViewAllOk] = useState(false);
+
+    function toggleViewAll() {
+        if(!viewAll) {
+            setViewAll(true);
+        }
+        else {
+            setViewAll(false);
+        }
+    }
 
     async function ChargeMoney() {
         if(!showMoneyCharge) {
@@ -54,7 +67,31 @@ function Dashboard() {
         }
     }
 
+    async function buttonClick(isbn) {
+        try {
+            const response = await axios
+              .post(HomepageEndpoint+'/buyBook', {
+                username,
+                isbn,
+              });
+            
+            alert(response.data.message);
+            if(response.data.status === 200) {
+                sessionStorage.setItem('window', 'library');
+            }
+            else {
+                sessionStorage.setItem('window', 'dashboard');
+            }
+            window.location.replace(window.location.href);
+          } 
+          catch (error) {
+            // Request failed
+            console.log("[ERROR] Request failed: " + error);
+          }
+    }
+
     useEffect(() => {
+        sessionStorage.setItem('buyBook', 'true');
         
         // Get current balance
         axios.get(
@@ -69,11 +106,21 @@ function Dashboard() {
         })
 
         axios.get(
+            HomepageEndpoint + '/getSixTransactions',{ params: { username: username}}        
+        ).then((response) => {
+            if(response.data.status === 200) {
+                setSixTransactions(response.data.transactions);
+            }
+            else {
+                alert(response.data.message);
+            }
+        })
+
+        axios.get(
             HomepageEndpoint + '/getTransactions',{ params: { username: username}}        
         ).then((response) => {
             if(response.data.status === 200) {
                 setTransactions(response.data.transactions);
-                console.log(response.data.transactions);
             }
             else {
                 alert(response.data.message);
@@ -100,7 +147,6 @@ function Dashboard() {
         ).then((response) => {
             if(response.data.status === 200 || response.data.status === 201) {
                 SetSuggBook(response.data.books);
-                console.log(response.data.books)
             }
             else {
                 alert(response.data.message);
@@ -178,6 +224,7 @@ function Dashboard() {
                                                 <div>Pages {value.num_pages}</div>
                                                 <div>Readers {value.ratings_count}</div>
                                                 <div>Rating {value.average_rating}</div>
+                                                <input type="button" id='buy' value={"Buy for  $"+value.price} onClick={() => buttonClick(value.ISBN)}></input>
                                             </div>
                                         </div>
                                     </div>
@@ -218,10 +265,17 @@ function Dashboard() {
                     <div className="TransactionHistory">
                         <div className="TransactionHistoryTop">
                             <h2>Recent Transactions</h2>
-                            <h4>view all</h4>
+                            {(transactions.length > 6 && viewAll) &&
+                                <h4 onClick={toggleViewAll} style={{cursor: 'pointer'}}>View all</h4>
+                            }
+                            {(transactions.length > 6 && !viewAll) &&
+                                <h4 onClick={toggleViewAll} style={{cursor: 'pointer'}}>View six</h4>
+                            }
                         </div>
-                        {
-                            transactions.map((value) => {
+                        {transactions.length === 0 ? (
+                            <h3 style={{marginTop: '10%'}}>You have no transaction yet.</h3>
+                        ): (
+                            viewAll && sixTransactions.map((value) => {
                                 return(
                                     <div className="TransactionHistoryEntry">
                                         {
@@ -229,21 +283,40 @@ function Dashboard() {
                                         }
                                         <h4>{value.date}</h4>
                                         {
-                                            value.amount > 0 && <h4 className="Plus">+{value.amount}</h4>
+                                            value.amount > 0 && <h4 className="Plus">+{value.amount}$</h4>
                                         }
                                         {
-                                            value.amount < 0 && <h4 className="Minus">{value.amount}</h4>
+                                            value.amount < 0 && <h4 className="Minus">{value.amount}$</h4>
                                         } 
                                     </div>
                                 )
                             })
-                        }
+                            ||
+                            !viewAll && transactions.map((value) => {
+                                return(
+                                    <div className="TransactionHistoryEntry">
+                                        {
+                                            value.book ? <h4>{value.book}</h4> : <h4>Credit Deposit</h4>
+                                        }
+                                        <h4>{value.date}</h4>
+                                        {
+                                            value.amount > 0 && <h4 className="Plus">+{value.amount}$</h4>
+                                        }
+                                        {
+                                            value.amount < 0 && <h4 className="Minus">{value.amount}$</h4>
+                                        } 
+                                    </div>
+                                )
+                            })
+                        )}
                     </div>
                     <div className="ProfileRecap">
                         <div className="ProfileRecapLeft">
                             <h2>Your Stats</h2>
                             <div className="ProfileRecapGenres">
-                            {
+                            {stats.length === 0 ? (
+                                <h3 style={{marginTop: '10%'}}>Your library is empty!</h3>
+                            ) : (
                                 stats.map((value) => {      
                                     var width = (value[1]/(stats[0])[1])*100
                                     return(
@@ -256,7 +329,7 @@ function Dashboard() {
                                         </div>
                                     )
                                 })
-                            }
+                            )}
                             </div>
                         </div>
                         <div className="Stats">

@@ -62,7 +62,7 @@ function Homepage() {
           currentScreen === Screens.Store && <BookStore OnBookClick={OnBookClicked} currentScreen={currentScreen}></BookStore>
         }
         {
-          currentScreen === Screens.Library && <Library></Library>
+          currentScreen === Screens.Library && <Library OnBookClick={OnBookClicked}></Library>
         }
         <BookPreview  ref={ref} book={currentDisplayingBook}></BookPreview>
         {

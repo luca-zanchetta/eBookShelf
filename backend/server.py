@@ -211,7 +211,6 @@ def get_total_expenses():
         return jsonify({'amount':amount, 'status':201})
     
     for transaction in transactions:
-        print(transaction)
         if transaction['amount'] < 0:
             amount += transaction['amount']
     
@@ -303,7 +302,7 @@ def buy_book():
 
     for tran in transactions:
         try:
-            if tran['book'] == isbn:
+            if tran['book'] == isbn and tran['user'] == username:
                 return jsonify({'message':'ERROR: You have already bought this book!', 'status':402})
         except Exception:
             pass
@@ -366,15 +365,27 @@ def get_bought_books():
 @app.route('/getCategories', methods=['GET'])
 def get_categories():
     categories = []
-    book_coll = db['book']
-    categories = book_coll.distinct('categories')
-    
-    if len(categories) == 0:
-        return jsonify({'message':'ERROR: there is no data!', 'status':500})
+    urls = []
 
-    if '' in categories:
-        categories.remove('')
-    return jsonify({'categories':categories, 'status':200})
+    book_coll = db['book']
+    # Check if no category is available
+    if book_coll.find() is None:
+        return jsonify({'categories':[], 'urls':[], 'status':201})
+    
+    
+    # I select distinct SINGLE categories. Indeed, a book can belong to more than one category
+    for book in book_coll.find():
+        if book['categories'] not in categories:
+            if ',' not in book['categories']:
+                categories.append(book['categories'])
+                urls.append(book['URL'])
+            elif ',' in book['categories']:
+                subcategories = book['categories'].split(', ')
+                for elem in subcategories:
+                    categories.append(elem)
+                    urls.append(book['URL'])
+    
+    return jsonify({'categories':categories, 'urls':urls, 'status':200})
 
 
 @app.route('/getBooksByCategory', methods=['GET'])
@@ -384,8 +395,11 @@ def get_books_by_category():
 
     book_coll = db['book']
     query = {'categories':category}
-    books = book_coll.find(query)
-    if books is None:
+    for book in book_coll.find(query):
+        book['_id'] = str(book['_id'])
+        books.append(book)
+
+    if len(books) == 0:
         return jsonify({'message':'No book found for this category!', 'status':201})
     
     return jsonify({'books':books, 'status':200})
@@ -513,8 +527,8 @@ def get_five_categories():
     return jsonify({'categories':categories, 'urls':urls, 'status':200})
 
 
-@app.route('/getTransactions', methods=['GET'])
-def getTransactions():
+@app.route('/getSixTransactions', methods=['GET'])
+def get_six_transactions():
     username = request.args.get('username')
     transactions = db['transaction']
     books = db['book']
@@ -525,7 +539,30 @@ def getTransactions():
     if transactions.find(query) is None:
         return jsonify({'transactions':[], 'status':201})
 
-    for t in transactions.find(query).limit(5):  
+    for t in transactions.find(query).limit(6):  
+        try:
+            t['book'] = books.find_one({'ISBN' : t['book']})['title']
+        except:
+            pass
+        trans.append(parse_json(t))
+        
+
+    return jsonify({'transactions':trans, 'status':200})
+
+
+@app.route('/getTransactions', methods=['GET'])
+def get_transactions():
+    username = request.args.get('username')
+    transactions = db['transaction']
+    books = db['book']
+
+    trans = []
+    query = {'user':username}
+
+    if transactions.find(query) is None:
+        return jsonify({'transactions':[], 'status':201})
+
+    for t in transactions.find(query):  
         try:
             t['book'] = books.find_one({'ISBN' : t['book']})['title']
         except:

@@ -13,9 +13,13 @@ const StoreScreens = {
 
 function BookStore(props) {
     var [Status,setStatus] = useState(StoreScreens.Store);
-    var [category, setCategory] = useState("");
+    const [category, setCategory] = useState("");
     const [bookName, setBookName] = useState('');
     const [books, setBooks] = useState([]);
+
+    useEffect(() => {
+        sessionStorage.setItem('buyBook', 'true');
+    }, []);
 
     const handleKeyPress = (event) => {
         if(event.target.value !== '') {
@@ -42,16 +46,24 @@ function BookStore(props) {
         }
     }
 
-    function SearchForBook(event) {
-        //should fetch the server for a list of books
-        if (event.keyCode === 13) {
-            var bookName = document.getElementById("bookName").value
-            setStatus(StoreScreens.ListView)
-        }
-    }
-
     function onCategoryClick(event){
-        console.log(event.currentTarget.id)
+        setCategory(event.currentTarget.id);
+
+        axios.get(
+            HomepageEndpoint + '/getBooksByCategory', {
+                params: {
+                    category: event.currentTarget.id,
+                },
+            }
+        ).then(function (response){
+            if(response.data.status === 201) {
+                // No books for this category
+            }
+            else if(response.data.status === 200) {
+                setBooks(response.data.books);
+                setStatus(StoreScreens.ListView);
+            }
+        })
     }
 
     return(
