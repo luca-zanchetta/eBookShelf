@@ -75,7 +75,6 @@ class BookPreview extends React.Component {
                         <div className="BookInfo">
                             <h3>{this.state.book.title}</h3>
                             <h5>{this.state.book.authors}</h5>
-                            <h5>Star vote da mettere</h5>
                             <div className="BookRecap">
                                 <div className="RecapEntry">
                                     <h4>

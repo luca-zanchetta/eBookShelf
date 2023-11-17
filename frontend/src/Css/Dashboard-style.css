@@ -292,6 +292,8 @@
     height: -webkit-fill-available;
     margin: 1%;
     padding: 1%;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .ProfileRecapLeft {
@@ -311,6 +313,8 @@
     display: flex;
     flex-direction: column;
     padding: 1%;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .ProfileRecapGenresEntry {

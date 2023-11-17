@@ -90,7 +90,7 @@ function StoreDefault(props) {
                     fiveCategories.map((category, index) => (
                         <div className="CategoryListEntry" id={category} onClick={props.onCategoryClick}>
                             <h3>{category}</h3>
-                            <img src={fiveURLs[index]}></img>             
+                            <img src={fiveURLs[index] == ""? sample:fiveURLs[index]}></img>             
                         </div>
                     ))}
                 </div>
@@ -100,7 +100,7 @@ function StoreDefault(props) {
                 allCategories.map((category, index) => (
                     <div className="CategoryListEntry" id={category} onClick={props.onCategoryClick}>
                         <h3>{category}</h3>
-                        <img src={allURLs[index]}></img>
+                        <img src={allURLs[index] == ""? sample:allURLs[index]}></img>
                     </div>
                 ))}
                 </div>
