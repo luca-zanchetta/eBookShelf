@@ -311,8 +311,8 @@ function Dashboard() {
                         )}
                     </div>
                     <div className="ProfileRecap">
+                        <h2>Your Stats</h2>
                         <div className="ProfileRecapLeft">
-                            <h2>Your Stats</h2>
                             <div className="ProfileRecapGenres">
                             {stats.length === 0 ? (
                                 <h3 style={{marginTop: '10%'}}>Your library is empty!</h3>
