@@ -10,7 +10,7 @@
     flex-direction: column;
     width: -webkit-fill-available;
     height: max-content;
-    overflow-y: auto;
+    overflow-y: hidden;
 }
 
 .StoreTopBar {
@@ -183,7 +183,6 @@
     flex-wrap: wrap;
     width: -webkit-fill-available;
     overflow-y: auto;
-    margin-bottom: 4%;
 }
 
 .ListCategoryContainer {
@@ -194,6 +193,6 @@
     flex-wrap: wrap;
     width: -webkit-fill-available;
     overflow-y: auto;
-    margin-bottom: 28%;
+    margin-bottom: 21.5%;
     margin-top: 2%;
 }
