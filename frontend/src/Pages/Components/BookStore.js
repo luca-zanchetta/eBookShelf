@@ -21,30 +21,28 @@ function BookStore(props) {
         sessionStorage.setItem('buyBook', 'true');
     }, []);
 
-    const handleKeyPress = async (event) => {
-        if(event.keyCode === 13) {
-            if(event.target.value !== '') {
-                await axios.get(
-                    HomepageEndpoint + '/getAllBooksByName', {
-                        params: {
-                            name: event.target.value,
-                        },
-                    }
-                ).then(function (response) {
-                    if(response.data.status === 201) {
-                        // Nessun libro
-                        setBooks([]);
-                    }
-                    else if(response.data.status === 200) {
-                        // ok
-                        setBooks(response.data.books);
-                    }
-                })
-                setStatus(StoreScreens.ListView);
-            }
-            else {
-                setStatus(StoreScreens.Store);
-            }
+    const handleKeyPress = (event) => {
+        if(event.target.value !== '') {
+            setStatus(StoreScreens.ListView);
+            axios.get(
+                HomepageEndpoint + '/getAllBooksByName', {
+                    params: {
+                        name: event.target.value,
+                    },
+                }
+            ).then(function (response) {
+                if(response.data.status === 201) {
+                    // Nessun libro
+                    setBooks([]);
+                }
+                else if(response.data.status === 200) {
+                    // ok
+                    setBooks(response.data.books);
+                }
+            })
+        }
+        else {
+            setStatus(StoreScreens.Store);
         }
     }
 
@@ -75,7 +73,7 @@ function BookStore(props) {
                     Store
                 </h1>
                 <div className="SearchBar">
-                    <input type="text" placeholder="Find a book..." id="bookName" defaultValue={bookName} onKeyDown={handleKeyPress}></input>
+                    <input type="text" placeholder="Find a book..." id="bookName" defaultValue={bookName} onChange={handleKeyPress}></input>
                 </div>
             </div>
             {

@@ -246,7 +246,6 @@ def get_books():
         return jsonify({'books':[], 'status':201})
 
     for book in book_coll.find():
-        book['_id'] = str(book['_id'])
         books.append(book)
     
     return jsonify({'books':books, 'status':200})
