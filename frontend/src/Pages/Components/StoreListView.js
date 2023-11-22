@@ -13,13 +13,10 @@ function StoreListView(props) {
 
     return(
         <div className="CenterStoreContainer" id='style-1'>
-            <div style={{display: 'flex', flexDirection: 'row'}}>
-                <div style={{alignContent:'start'}}>
-                    <input type='image' src={backIcon} alt='back' style={{width:'20%', marginRight: '70%'}} onClick={backClick}></input>
-                </div>
+            <div style={{display: 'flex', flexDirection: 'row', padding:'1.5%'}}>
                 <div style={{alignContent:'center'}}>
                     {category &&
-                        <h1>Category: {category}</h1>
+                        <h2 style={{fontSize: '1.4vw',whiteSpace:'nowrap'}}>Category: {category}</h2>
                     }
                 </div>
             </div>

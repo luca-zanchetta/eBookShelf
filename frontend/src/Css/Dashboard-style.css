@@ -66,6 +66,16 @@
 .RightArrowImg {
     display: flex;
 }
+.SuggestedWrapper {
+    display: flex;
+    width: -webkit-fill-available;
+    background-color: #F3F3F4;
+    border-radius: 0px 8px 8px 0px;
+    border-right: 1px solid;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    align-items: center;
+}
 
 .SuggestedBooksEntryText {
     display: flex;
@@ -74,11 +84,6 @@
     padding: 1.5%;
     align-items: flex-start;
     flex-direction: column;
-    background-color: #F3F3F4;
-    border-radius: 0px 8px 8px 0px;
-    border-right: 1px solid;
-    border-top: 1px solid;
-    border-bottom: 1px solid;
 }
 
 .SuggestedBooksEntryText >h3 {
@@ -94,17 +99,18 @@
 .BookData {
     display: flex;
     flex-direction: row;
-    height: min-content;
+    height: -webkit-fill-available;
+    width: -webkit-fill-available;
 }
 
-.BookData > input[type="button"] {
+.SuggestedWrapper > input[type="button"] {
     background-color: rgb(120,70,180);
-    width: 60%;
-    padding: 2.5%;
+    padding: 1.5%;
+    min-width: 12%;
+    margin-right: .5%;
     border-radius: 80px;
     border: none;
     color: white;
-    margin-bottom: 5%;
     cursor: pointer;
 }
 

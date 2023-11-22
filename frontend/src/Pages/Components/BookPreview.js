@@ -5,6 +5,7 @@ import '../../Css/star-vote.css'
 // import Rating from '@mui/material/Rating';
 // import Typography from '@mui/material/Typography';
 import sample from '../../Icons/sample.jpg';
+import x from '../../Icons/x.png';
 import axios from 'axios';
 import { Screens } from '../Homepage';
 import { HomepageEndpoint } from '../Homepage';
@@ -18,8 +19,10 @@ class BookPreview extends React.Component {
         super(props)
 
         this.state = {
-            book: null
+            book: null,
+            CloseDialog: props.CloseWindow
         }
+
     }
 
     FormatRating(rating) {
@@ -69,6 +72,7 @@ class BookPreview extends React.Component {
             <>
                  {this.state.book != null &&
                     <div className="RightContainer">
+                        <img src={x} id="xicon" onClick={this.state.CloseDialog}></img>
                         <h2>Book details</h2>
                         {this.state.book != null && <>   
                         <img src={this.state.book.URL == ""? sample:this.state.book.URL} id="book"></img>

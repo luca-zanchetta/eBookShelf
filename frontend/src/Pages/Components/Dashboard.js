@@ -217,15 +217,18 @@ function Dashboard() {
                                 return(
                                     <div className='SuggestedBooksEntry'>
                                         <img src={value.URL == ""? sample:value.URL} className="SuggestedBookImage"></img>
-                                        <div className='SuggestedBooksEntryText'>
-                                            <h3>{value.title}</h3>
-                                            <h4>{value.authors}</h4>
-                                            <div className='BookData'>
-                                                <div>Pages {value.num_pages}</div>
-                                                <div>Readers {value.ratings_count}</div>
-                                                <div>Rating {value.average_rating}</div>
-                                                <input type="button" id='buy' value={"Buy for  $"+value.price} onClick={() => buttonClick(value.ISBN)}></input>
+                                        <div className='SuggestedWrapper'>
+                                            <div className='SuggestedBooksEntryText'>
+                                                <h3>{value.title}</h3>
+                                                <h4>{value.authors}</h4>
+                                                <div className='BookData'>
+                                                    <div>Pages {value.num_pages}</div>
+                                                    <div>Readers {value.ratings_count}</div>
+                                                    <div>Rating {value.average_rating}</div>                                          
+                                                </div> 
+                                                
                                             </div>
+                                        <input type="button" id='buy' value={"Buy for  $"+value.price} onClick={() => buttonClick(value.ISBN)}></input>                                        
                                         </div>
                                     </div>
                                 )

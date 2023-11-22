@@ -53,6 +53,11 @@ function Homepage() {
       ref.current.SetBook(event.currentTarget.id)
     }
 
+    function CloseBookPreview(){
+      ref.current.SetBook(null)
+      console.log("test")
+    }
+
     return (
       <div className='HomeContainer'>
         {!loggedIn && <Navigate to="/login" />}
@@ -64,7 +69,7 @@ function Homepage() {
         {
           currentScreen === Screens.Library && <Library OnBookClick={OnBookClicked}></Library>
         }
-        <BookPreview  ref={ref} book={currentDisplayingBook}></BookPreview>
+        <BookPreview  ref={ref} book={currentDisplayingBook} CloseWindow={CloseBookPreview}></BookPreview>
         {
           currentScreen === Screens.Dashboard && <Dashboard ref={ref} book={currentDisplayingBook}></Dashboard>
         }
