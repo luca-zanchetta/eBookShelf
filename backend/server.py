@@ -231,6 +231,31 @@ def get_name_by_username():
     return jsonify({'name':user['name'], 'surname':user['surname'], 'status':200})
 
 
+@app.route('/deleteAccount', methods=['POST'])
+def delete_account():
+    data = request.get_json()
+    username = data['username']
+    user_coll = db['user']
+    transaction_coll = db['transaction']
+
+    # Check if the user exists
+    query = {'username':username}
+    user = user_coll.find_one(query)
+    if user is None:
+        return jsonify({'message':'ERROR: User was not found.', 'status':404})
+    
+    # Implementation of DELETE CASCADE
+    # Delete the transactions of the user
+    query = {'user':username}
+    for transaction in transaction_coll.find(query):
+        transaction_coll.delete_one(transaction)
+    
+    # Delete the user
+    user_coll.delete_one(user)
+
+    return jsonify({'message':'Account successfully deleted!', 'status':200})
+
+
 
 #############################################################################################
 ###################################### BOOKS APIs ###########################################
