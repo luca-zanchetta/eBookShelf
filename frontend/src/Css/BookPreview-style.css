@@ -39,6 +39,7 @@ h2 {
     aspect-ratio: 1 / 1;
     max-width: 1.5%;
     margin: 0;
+    cursor: pointer;
 }
 
 .BookInfo > h3 {
