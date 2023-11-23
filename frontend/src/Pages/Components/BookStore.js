@@ -13,7 +13,7 @@ const StoreScreens = {
 
 function BookStore(props) {
     var [Status,setStatus] = useState(StoreScreens.Store);
-    const [category, setCategory] = useState("");
+    const [category, setCategory] = useState('');
     const [bookName, setBookName] = useState('');
     const [books, setBooks] = useState([]);
 
@@ -24,23 +24,46 @@ function BookStore(props) {
     const handleKeyPress = async (event) => {
         if(event.keyCode === 13) {
             if(event.target.value !== '') {
-                await axios.get(
-                    HomepageEndpoint + '/getAllBooksByName', {
-                        params: {
-                            name: event.target.value,
-                        },
-                    }
-                ).then(function (response) {
-                    if(response.data.status === 201) {
-                        // Nessun libro
-                        setBooks([]);
-                    }
-                    else if(response.data.status === 200) {
-                        // ok
-                        setBooks(response.data.books);
-                    }
-                })
-                setStatus(StoreScreens.ListView);
+                if(category === '') {
+                    await axios.get(
+                        HomepageEndpoint + '/getAllBooksByName', {
+                            params: {
+                                name: event.target.value,
+                            },
+                        }
+                    ).then(function (response) {
+                        if(response.data.status === 201) {
+                            // Nessun libro
+                            setBooks([]);
+                        }
+                        else if(response.data.status === 200) {
+                            // ok
+                            setBooks(response.data.books);
+                        }
+                    })
+                    setStatus(StoreScreens.ListView);
+                }
+                else if(category !== '') {
+                    console.log('category: '+category)
+                    await axios.get(
+                        HomepageEndpoint + '/getCategoryBooksByName', {
+                            params: {
+                                name: event.target.value,
+                                category: category,
+                            },
+                        }
+                    ).then(function (response) {
+                        if(response.data.status === 201) {
+                            // Nessun libro
+                            setBooks([]);
+                        }
+                        else if(response.data.status === 200) {
+                            // ok
+                            setBooks(response.data.books);
+                        }
+                    })
+                    setStatus(StoreScreens.ListView);
+                }
             }
             else {
                 setStatus(StoreScreens.Store);
@@ -68,10 +91,15 @@ function BookStore(props) {
         })
     }
 
+    function onStoreClick() {
+        setStatus(StoreScreens.Store);
+        setCategory('');
+    }
+
     return(
         <div className="StoreContainer">
             <div className="StoreTopBar">
-            <h1 onClick={ () => setStatus(StoreScreens.Store)}>
+            <h1 onClick={onStoreClick}>
                     Store
                 </h1>
                 <div className="SearchBar">
@@ -79,9 +107,9 @@ function BookStore(props) {
                 </div>
             </div>
             {
-                Status == StoreScreens.Store &&  <StoreDefault onBookClick={props.OnBookClick} onCategoryClick= {onCategoryClick}></StoreDefault>
+                Status === StoreScreens.Store &&  <StoreDefault onBookClick={props.OnBookClick} onCategoryClick= {onCategoryClick}></StoreDefault>
                 ||
-                Status == StoreScreens.ListView &&  <StoreListView currentCategory={category} books={books} onBookClick={props.OnBookClick}></StoreListView>
+                Status === StoreScreens.ListView &&  <StoreListView currentCategory={category} books={books} onBookClick={props.OnBookClick}></StoreListView>
             }
         </div>
     );

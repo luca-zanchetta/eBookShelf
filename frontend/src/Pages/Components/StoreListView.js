@@ -4,12 +4,10 @@ import backIcon from '../../Icons/back.png';
 import sample from '../../Icons/sample.jpg';
 
 function StoreListView(props) {
-    const [books, setBooks] = useState(props.books);
+    const books = props.books;
     const category = props.currentCategory;
 
-    function backClick() {
-        window.location.reload(window.location.href);
-    }
+    console.log('Received books: '+books);
 
     return(
         <div className="CenterStoreContainer" id='style-1'>

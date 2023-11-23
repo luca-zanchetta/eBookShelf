@@ -425,6 +425,27 @@ def get_all_books_by_name():
     return jsonify({'books':return_books, 'status':200})
 
 
+@app.route('/getCategoryBooksByName', methods=['GET'])
+def get_category_books_by_name():
+    category = request.args.get('category')
+    name = request.args.get('name')
+    books = []
+    return_books = []
+
+    book_coll = db['book']
+    for book in book_coll.find({'title':{'$regex':name, "$options": "i"}}):
+        books.append(book)
+    if len(books) == 0:
+        return jsonify({'books':[], 'status':201})
+    
+    for book in books:
+        book['_id'] = str(book['_id'])
+        if category in book['categories']:
+            return_books.append(book)
+    
+    return jsonify({'books':return_books, 'status':200})
+
+
 @app.route('/getBoughtBooksByName', methods=['GET'])
 def get_bought_books_by_name():
     username = request.args.get('username')
