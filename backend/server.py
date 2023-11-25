@@ -140,29 +140,29 @@ def get_balance():
     
     return jsonify({'balance':balance, 'status':200})
 
-@app.route('/deleteAccount', methods=['POST'])
-def delete_account():
-    data = request.get_json()
+# @app.route('/deleteAccount', methods=['POST'])
+# def delete_account():
+#     data = request.get_json()
 
-    username = data['username']
-    user_coll = db['user']
+#     username = data['username']
+#     user_coll = db['user']
     
-    # Check if the user exists
-    query = {'username':username}
-    user = user_coll.find_one(query)
+#     # Check if the user exists
+#     query = {'username':username}
+#     user = user_coll.find_one(query)
 
-    if user is None:
-        return jsonify({'message':'ERROR: User was not found.', 'status':404})
+#     if user is None:
+#         return jsonify({'message':'ERROR: User was not found.', 'status':404})
     
-    transaction_coll = db['transaction']
-    query_2 = {'user':username}
-    transaction_coll.delete_many(query_2)
+#     transaction_coll = db['transaction']
+#     query_2 = {'user':username}
+#     transaction_coll.delete_many(query_2)
 
-    transaction = transaction_coll.find_one(query_2)
-    if transaction is None:
-        return jsonify({'message':'Account deleted successfully!', 'status':200})
+#     transaction = transaction_coll.find_one(query_2)
+#     if transaction is None:
+#         return jsonify({'message':'Account deleted successfully!', 'status':200})
     
-    return jsonify({'message':'ERROR: Something wrong happened.', 'status':500})
+#     return jsonify({'message':'ERROR: Something wrong happened.', 'status':500})
 
 
 @app.route('/getTotalChargedMoney', methods=['GET'])
