@@ -33,9 +33,17 @@ Right after the login, you have been redirected to the homepage of the applicati
 
 In the bottom part of the page, there are some book categories that you can exploit. There is also a *view all* button, that when clicked will make the application show all the book categories that are in the system. In any case, when you select a category, the application will show a list of all the books belonging to that particular category. If you select a book, the application will show the book preview we have discussed above. 
 
+Finally, in the top-right corner of the page there is a search bar: through this bar, you can search for a book by inserting (part of) its name. If you have selected a category, the book will be searched within the corresponding selected category.
+
 ### Personal Library
+When you are redirected to the *personal library* page of the application, you can see a list of all the books that you have bought so far. If you have not bought any book yet, you'll simply see a message stating this condition. 
+
+Suppose that you have bought some books. In this case, you see the complete list of all the books you have bought so far, without any category distinction. If you click on a particular book, you'll see the book preview we have discussed in the [book store](#book-store) section, without the button that would allow for a purchase. It is also possible to search for a book that you have bought, by the corresponding search bar placed in the top-right corner of the page.
 
 ### Dashboard
+The third main component of the application is the *dashboard*, in which you can do many things. First of all, there is a *suggested book* section, in which you can see some books that you haven't bought so far and that the application suggests to you, based on a rating/readers ratio criterion. You are not able to see the classical book preview in this case, but you are still able to perform a quick buy operation; if you want further information about a suggested book, you can always search for it in the [book store](#book-store) section.
+
+Near the *suggested book* section, there is a *balance recap* section, in which you can see the current amount of money that are charged in your personal account. 
 
 ## Prerequisites
 
