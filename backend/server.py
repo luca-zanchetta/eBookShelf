@@ -140,29 +140,29 @@ def get_balance():
     
     return jsonify({'balance':balance, 'status':200})
 
-@app.route('/deleteAccount', methods=['POST'])
-def delete_account():
-    data = request.get_json()
+# @app.route('/deleteAccount', methods=['POST'])
+# def delete_account():
+#     data = request.get_json()
 
-    username = data['username']
-    user_coll = db['user']
+#     username = data['username']
+#     user_coll = db['user']
     
-    # Check if the user exists
-    query = {'username':username}
-    user = user_coll.find_one(query)
+#     # Check if the user exists
+#     query = {'username':username}
+#     user = user_coll.find_one(query)
 
-    if user is None:
-        return jsonify({'message':'ERROR: User was not found.', 'status':404})
+#     if user is None:
+#         return jsonify({'message':'ERROR: User was not found.', 'status':404})
     
-    transaction_coll = db['transaction']
-    query_2 = {'user':username}
-    transaction_coll.delete_many(query_2)
+#     transaction_coll = db['transaction']
+#     query_2 = {'user':username}
+#     transaction_coll.delete_many(query_2)
 
-    transaction = transaction_coll.find_one(query_2)
-    if transaction is None:
-        return jsonify({'message':'Account deleted successfully!', 'status':200})
+#     transaction = transaction_coll.find_one(query_2)
+#     if transaction is None:
+#         return jsonify({'message':'Account deleted successfully!', 'status':200})
     
-    return jsonify({'message':'ERROR: Something wrong happened.', 'status':500})
+#     return jsonify({'message':'ERROR: Something wrong happened.', 'status':500})
 
 
 @app.route('/getTotalChargedMoney', methods=['GET'])
@@ -229,6 +229,31 @@ def get_name_by_username():
         return jsonify({'message':'ERROR: User was not found.', 'status':404})
     
     return jsonify({'name':user['name'], 'surname':user['surname'], 'status':200})
+
+
+@app.route('/deleteAccount', methods=['POST'])
+def delete_account():
+    data = request.get_json()
+    username = data['username']
+    user_coll = db['user']
+    transaction_coll = db['transaction']
+
+    # Check if the user exists
+    query = {'username':username}
+    user = user_coll.find_one(query)
+    if user is None:
+        return jsonify({'message':'ERROR: User was not found.', 'status':404})
+    
+    # Implementation of DELETE CASCADE
+    # Delete the transactions of the user
+    query = {'user':username}
+    for transaction in transaction_coll.find(query):
+        transaction_coll.delete_one(transaction)
+    
+    # Delete the user
+    user_coll.delete_one(user)
+
+    return jsonify({'message':'Account successfully deleted!', 'status':200})
 
 
 
@@ -421,6 +446,27 @@ def get_all_books_by_name():
     for book in books:
         book['_id'] = str(book['_id'])
         return_books.append(book)
+    
+    return jsonify({'books':return_books, 'status':200})
+
+
+@app.route('/getCategoryBooksByName', methods=['GET'])
+def get_category_books_by_name():
+    category = request.args.get('category')
+    name = request.args.get('name')
+    books = []
+    return_books = []
+
+    book_coll = db['book']
+    for book in book_coll.find({'title':{'$regex':name, "$options": "i"}}):
+        books.append(book)
+    if len(books) == 0:
+        return jsonify({'books':[], 'status':201})
+    
+    for book in books:
+        book['_id'] = str(book['_id'])
+        if category in book['categories']:
+            return_books.append(book)
     
     return jsonify({'books':return_books, 'status':200})
 

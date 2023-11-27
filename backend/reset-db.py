@@ -17,4 +17,5 @@ x = user.insert_one(tmp)
 print('[INFO] Collection \'user\' created.')
 
 load_data()
-print('[INFO] Loaded data!')
+print('[INFO] Collection \'book\' created.')
+print('[INFO] The system is ready!')
