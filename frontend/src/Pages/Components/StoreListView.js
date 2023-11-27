@@ -1,6 +1,4 @@
-import { useState } from 'react';
 import '../../Css/BookStore-style.css'
-import backIcon from '../../Icons/back.png';
 import sample from '../../Icons/sample.jpg';
 
 function StoreListView(props) {

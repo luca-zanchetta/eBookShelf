@@ -1,6 +1,5 @@
 import axios from 'axios';
-import '../../Css/BookStore-style.css'
-import sample from '../../Icons/sample.jpg';
+import '../../Css/BookStore-style.css';
 import StoreDefault from './StoreDefault';
 import StoreListView from './StoreListView';
 import { useState, useEffect } from 'react';
@@ -14,7 +13,7 @@ const StoreScreens = {
 function BookStore(props) {
     var [Status,setStatus] = useState(StoreScreens.Store);
     const [category, setCategory] = useState('');
-    const [bookName, setBookName] = useState('');
+    const bookName = '';
     const [books, setBooks] = useState([]);
 
     useEffect(() => {
@@ -107,9 +106,9 @@ function BookStore(props) {
                 </div>
             </div>
             {
-                Status === StoreScreens.Store &&  <StoreDefault onBookClick={props.OnBookClick} onCategoryClick= {onCategoryClick}></StoreDefault>
+                (Status === StoreScreens.Store &&  <StoreDefault onBookClick={props.OnBookClick} onCategoryClick= {onCategoryClick}></StoreDefault>)
                 ||
-                Status === StoreScreens.ListView &&  <StoreListView currentCategory={category} books={books} onBookClick={props.OnBookClick}></StoreListView>
+                (Status === StoreScreens.ListView &&  <StoreListView currentCategory={category} books={books} onBookClick={props.OnBookClick}></StoreListView>)
             }
         </div>
     );
