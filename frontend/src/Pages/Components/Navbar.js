@@ -2,7 +2,7 @@ import '../../Css/Navbar-style.css'
 import profile from '../../Icons/user.png';
 import store from '../../Icons/purse.png';
 import books from '../../Icons/books.png';
-import settings from '../../Icons/settings.png';
+import del from '../../Icons/delete.png';
 import logout from '../../Icons/logout.png';
 import dashboard from '../../Icons/dashboard.png';
 import React, { useState, useEffect } from 'react';
@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Screens } from '../Homepage';
 import { HomepageEndpoint } from '../Homepage';
+import Alert from './Alert';
 
 const endpointGetNameByUsername = 'http://localhost:5000/getNameByUsername';
 
@@ -20,6 +21,7 @@ function Navbar({OnNavigatorClick}) {
     const [currentDisplay,setDisplay] = useState(Screens.Store);
     const [name, setName] = useState("");
     const [surname, setSurname] = useState("");
+    const [show, SetShow] = useState(false);
     const [balance,SetBalance] = useState(0)
     const navigate = useNavigate();
 
@@ -73,6 +75,30 @@ function Navbar({OnNavigatorClick}) {
           window.location.replace(window.location.href);
         }
     }
+    async function deleteAccountResut(res){
+        SetShow(false);
+        if(res) {
+            //delete account confirmed
+            try {
+                const response = await axios
+                  .post(HomepageEndpoint+'/deleteAccount', {
+                    username : loggedIn,
+                  });
+                
+                if(response.data.status === 200) {
+                    localStorage.clear();
+                    sessionStorage.clear();
+                    navigate("/login");
+                    window.location.replace(window.location.href);
+                }
+              } 
+              catch (error) {
+                // Request failed
+                console.log("[ERROR] Request failed: " + error);
+              }
+
+        }
+    }
 
     useEffect(() => {
         show_data();
@@ -89,6 +115,9 @@ function Navbar({OnNavigatorClick}) {
 
     return(
         <div className='Container'>
+            {
+                show && <Alert message="Alert!" body="Are you sure you want to delete your account?" result={deleteAccountResut}></Alert>
+            }
             <h1>
                 E-BookShelf
             </h1>
@@ -132,13 +161,13 @@ function Navbar({OnNavigatorClick}) {
             <hr />
             {/* -=================buttons=====================*/}
             <div className='ToggleMenu'>
-                {/* <div className='ToggleEntry'>
+                <div className='ToggleEntry' onClick={() => SetShow(true)}>
                     <input type='button' id="settings" name="settings"></input>
                     <div className='ToggleIcon'>
-                        <img src={settings}></img>
+                        <img src={del}></img>
                     </div>
-                    <label for="settings">Settings</label>
-                </div> */}
+                    <label for="settings" style={{fontSize:'.95vw'}}>Delete Account</label>
+                </div>
                 <div className='ToggleEntry' onClick={handleLogout}>
                     <input type='button' id="logout" name="logout"></input>
                     <div className='ToggleIcon'>
