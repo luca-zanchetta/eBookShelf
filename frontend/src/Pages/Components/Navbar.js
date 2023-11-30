@@ -116,7 +116,7 @@ function Navbar({OnNavigatorClick}) {
     return(
         <div className='Container'>
             {
-                show && <Alert message="Alert!" body="Are you sure you want to delete your account?" result={deleteAccountResut}></Alert>
+                show && <Alert message="WARNING!" body="Are you sure you want to delete your account?" result={deleteAccountResut}></Alert>
             }
             <h1>
                 E-BookShelf
