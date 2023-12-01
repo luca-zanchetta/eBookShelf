@@ -18,4 +18,5 @@ print('[INFO] Collection \'user\' created.')
 
 load_data()
 print('[INFO] Collection \'book\' created.')
+print('[INFO] Collection \'category\' created.')
 print('[INFO] The system is ready!')
