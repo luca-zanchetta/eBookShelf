@@ -10,12 +10,12 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 
 function Dashboard() {
-    const [showMoneyCharge, setShowMoney] = useState(false);
-    const [timeout, SetTimerId] = useState();
-    const username = localStorage.getItem('LoggedUser');
-    const [balance, setBalance] = useState(0);
-    const [chargedMoney, setChargedMoney] = useState(0);
-    const [expenses, setExpenses] = useState(0);
+    const [showMoneyCharge, setShowMoney] = useState(false)
+    const [timeout, SetTimerId] = useState()
+    const username = localStorage.getItem('LoggedUser')
+    const [balance, setBalance] = useState(0)
+    const [chargedMoney, setChargedMoney] = useState(0)
+    const [expenses, setExpenses] = useState(0)
     const [sixTransactions, setSixTransactions] = useState([])
     const [transactions, setTransactions] = useState([])
     const [readBooks, setReadBooks] = useState(0)
@@ -23,8 +23,7 @@ function Dashboard() {
     const [stats,SetStats] = useState([])
     const [suggBook,SetSuggBook] = useState([])
 
-    const [viewAll, setViewAll] = useState(true);
-    const [viewAllOk, setViewAllOk] = useState(false);
+    const [viewAll, setViewAll] = useState(true)
 
     function toggleViewAll() {
         if(!viewAll) {
@@ -140,18 +139,6 @@ function Dashboard() {
                 alert(response.data.message);
             }
         })
-
-        axios.get(
-            HomepageEndpoint + '/getSuggestedBooks',
-            {params : {username : username} }
-        ).then((response) => {
-            if(response.data.status === 200 || response.data.status === 201) {
-                SetSuggBook(response.data.books);
-            }
-            else {
-                alert(response.data.message);
-            }
-        })
         
         axios.get(
             HomepageEndpoint + '/getBoughtBooks',
@@ -199,6 +186,21 @@ function Dashboard() {
                 alert(response.data.message);
             }
         })
+
+        axios.get(
+            HomepageEndpoint + '/getSuggestedBooks',
+            {params: {
+                username: username
+            }}
+        ).then((response) => {
+            if(response.data.status === 200 || response.data.status === 201) {
+                SetSuggBook(response.data.books);
+            }
+            else {
+                alert(response.data.message);
+            }
+        })
+
     }, []);
     
     return(

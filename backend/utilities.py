@@ -64,3 +64,14 @@ def load_data():
 
 def parse_json(data):
     return json.loads(json_util.dumps(data))
+
+
+def getBooksByCategory(category):
+    return_books = []
+    book_coll = db['book']
+
+    for book in book_coll.find({'categories':category}):
+        book['_id'] = str(book['_id'])
+        return_books.append(book)
+    
+    return return_books

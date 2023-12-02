@@ -1,7 +1,7 @@
 import pymongo
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from utilities import parse_json
+from utilities import parse_json, getBooksByCategory
 from datetime import datetime
 
 app = Flask(__name__)
@@ -597,11 +597,18 @@ def get_transactions():
 
 @app.route('/getSuggestedBooks', methods=['GET'])
 def getSuggestedBooks():
-    books = []
     username = request.args.get('username')
-    transactions = db['transaction']
-    trans = []
+    
+    bought_books = []
+    candidate_books = []
+    book_ratios = []
+    books = []
+    bought_categories = []
+    book_categories = []
+    book_categories_ratios = []
+    
     book_coll = db['book']
+    transactions = db['transaction']
     
     # Check if no book is available
     if book_coll.find() is None:
@@ -609,16 +616,87 @@ def getSuggestedBooks():
     
     for t in transactions.find({'user':username}):  
         try:
-            trans.append(t['book'])
+            bought_books.append(t['book'])
         except:
             pass
     
+    # Candidate books and corresponding ratios
     for book in book_coll.find().sort([("ratings_count",pymongo.DESCENDING),("average_rating",pymongo.DESCENDING)]):
-        if(book['ISBN'] not in trans):
-            books.append(parse_json(book))
-        if(len(books) == 3):
-            break
+        if(book['ISBN'] not in bought_books):
+            candidate_books.append(parse_json(book))
+            if float(book['average_rating']) != 0:
+                book_ratios.append(float(book['ratings_count'])/float(book['average_rating']))
+        elif(book['ISBN'] in bought_books):     # I have already bought this book; I'm interested only in the category
+            bought_categories.append(book['categories'])
     
+
+    if len(bought_categories) == 0:     # I have not bought any book: my suggestion is only based on the ratio
+        while len(books) != 3:
+            max_ratio = max(book_ratios)
+            for book in candidate_books:
+                if float(book['average_rating']) != 0:
+                    if float(book['ratings_count'])/float(book['average_rating']) == max_ratio:
+                        books.append(book)
+                        book_ratios.remove(max_ratio)
+    
+    else:    # I have bought at least one book: my suggestion is based on the ratio per bought category
+        for category in bought_categories:
+            for book in getBooksByCategory(category):
+                book_categories.append(book)
+                if float(book['average_rating']) != 0 and book['ISBN'] not in bought_books:
+                    book_categories_ratios.append(float(book['ratings_count'])/float(book['average_rating']))
+        
+
+        # One category bought: my suggestion will be the best book of that category and the best 2 books without category constraints
+        if len(bought_categories) == 1:
+            while len(books) != 1:
+                max_ratio = max(book_categories_ratios)
+                for book in book_categories:
+                    if book['ISBN'] not in bought_books:
+                        if float(book['average_rating']) != 0:
+                            if float(book['ratings_count'])/float(book['average_rating']) == max_ratio:
+                                books.append(book)
+                                book_categories_ratios.remove(max_ratio)
+            while len(books) != 3:
+                max_ratio = max(book_ratios)
+                for book in candidate_books:
+                    if float(book['average_rating']) != 0:
+                        if float(book['ratings_count'])/float(book['average_rating']) == max_ratio:
+                            books.append(book)
+                            book_ratios.remove(max_ratio)
+        
+
+        # Two categories bought: my suggestion will be the best 2 books of those categories and the best book without category constraints
+        elif len(bought_categories) == 2:
+            while len(books) != 1:
+                max_ratio = max(book_categories_ratios)
+                for book in book_categories:
+                    if book['ISBN'] not in bought_books:
+                        if float(book['average_rating']) != 0:
+                            if float(book['ratings_count'])/float(book['average_rating']) == max_ratio:
+                                books.append(book)
+                                book_categories_ratios.remove(max_ratio)
+            while len(books) != 3:
+                max_ratio = max(book_ratios)
+                for book in candidate_books:
+                    if float(book['average_rating']) != 0:
+                        if float(book['ratings_count'])/float(book['average_rating']) == max_ratio:
+                            books.append(book)
+                            book_ratios.remove(max_ratio)
+        
+
+        # 3+ categories bought: my suggestion will be the best 3 books of those categories only
+        elif len(bought_categories) == 3:
+            while len(books) != 1:
+                max_ratio = max(book_categories_ratios)
+                for book in book_categories:
+                    if book['ISBN'] not in bought_books:
+                        if float(book['average_rating']) != 0:
+                            if float(book['ratings_count'])/float(book['average_rating']) == max_ratio:
+                                books.append(book)
+                                book_categories_ratios.remove(max_ratio)
+    
+
     return jsonify({'books':books, 'status':200})
 
 
