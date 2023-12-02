@@ -668,7 +668,7 @@ def getSuggestedBooks():
 
         # Two categories bought: my suggestion will be the best 2 books of those categories and the best book without category constraints
         elif len(bought_categories) == 2:
-            while len(books) != 1:
+            while len(books) != 2:
                 max_ratio = max(book_categories_ratios)
                 for book in book_categories:
                     if book['ISBN'] not in bought_books:
@@ -687,7 +687,7 @@ def getSuggestedBooks():
 
         # 3+ categories bought: my suggestion will be the best 3 books of those categories only
         elif len(bought_categories) == 3:
-            while len(books) != 1:
+            while len(books) != 3:
                 max_ratio = max(book_categories_ratios)
                 for book in book_categories:
                     if book['ISBN'] not in bought_books:
