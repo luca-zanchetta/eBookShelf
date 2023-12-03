@@ -8,8 +8,10 @@ import { HomepageEndpoint } from '../Homepage';
 import axios from 'axios';
 
 import { useState, useEffect } from 'react';
+import Alert, { Alerts } from './Alert';
 
 function Dashboard() {
+    const [buyAlert,setBuyAlert] = useState(0)
     const [showMoneyCharge, setShowMoney] = useState(false)
     const [timeout, SetTimerId] = useState()
     const username = localStorage.getItem('LoggedUser')
@@ -74,14 +76,7 @@ function Dashboard() {
                 isbn,
               });
             
-            alert(response.data.message);
-            if(response.data.status === 200) {
-                sessionStorage.setItem('window', 'library');
-            }
-            else {
-                sessionStorage.setItem('window', 'dashboard');
-            }
-            window.location.replace(window.location.href);
+            setBuyAlert(response.data.status);
           } 
           catch (error) {
             // Request failed
@@ -95,7 +90,7 @@ function Dashboard() {
         // Get current balance
         axios.get(
             HomepageEndpoint + '/getBalance',{ params: { username: username}}        
-        ).then((response) => {
+        ).then((response) => {      
             if(response.data.status === 200) {
                 setBalance(response.data.balance);
             }
@@ -205,6 +200,18 @@ function Dashboard() {
     
     return(
         <div className="Dashboard">
+                {
+                    (buyAlert == 400 || buyAlert == 401) && <Alert message="Error!" body="Your account has insufficient funds to cover this transaction." type={Alerts.Confirm} result={(res) => setBuyAlert(0)}></Alert>
+                }
+                {
+                    buyAlert == 501 && <Alert message="Error!" body="An unexpected error occured during the transaction! Retry later." type={Alerts.Confirm} result={(res) => setBuyAlert(0)}></Alert>
+                }
+                {
+                    buyAlert == 200 && <Alert message="Success!" body="You have bought a new book! You will find the new book in your library." type={Alerts.Confirm} result={(res) => setBuyAlert(0)}></Alert>
+                } 
+                {
+                    buyAlert == 402 && <Alert message="Error!" body="You already own this book!" type={Alerts.Confirm} result={(res) => setBuyAlert(0)}></Alert>
+                }
            <div className='DashboardTopBar'>
                 <h1>
                     Dashboard

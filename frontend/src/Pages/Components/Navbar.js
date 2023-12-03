@@ -11,7 +11,7 @@ import axios from 'axios';
 import { Screens } from '../Homepage';
 import { HomepageEndpoint } from '../Homepage';
 import Alert from './Alert';
-
+import { Alerts } from './Alert';
 const endpointGetNameByUsername = 'http://localhost:5000/getNameByUsername';
 
 
@@ -116,7 +116,7 @@ function Navbar({OnNavigatorClick}) {
     return(
         <div className='Container'>
             {
-                show && <Alert message="WARNING!" body="Are you sure you want to delete your account?" result={deleteAccountResut}></Alert>
+                show && <Alert message="WARNING!" body="Are you sure you want to delete your account?" type={Alerts.AskConfirmation} result={deleteAccountResut}></Alert>
             }
             <h1>
                 E-BookShelf

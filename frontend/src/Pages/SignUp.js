@@ -5,6 +5,7 @@ import hide from '../Icons/hide.png';
 import { useState } from 'react';
 import { useNavigate, Navigate } from 'react-router-dom';
 import axios from "axios";
+import Alert, { Alerts } from './Components/Alert';
 
 const LoginResult = {
     correctField : 0,
@@ -17,7 +18,7 @@ const loggedIn = localStorage.getItem("LoggedUser");
 
 function SignUp(){
     const navigate = useNavigate();
-
+    const [showAlert,setShowAlert] = useState(false)
     const [showPs, SetShow] = useState(false);
     const [showCopyPs, SetCopyShow] = useState(false);
     const [invalidPs, SetInvPs] = useState(LoginResult.correctField);
@@ -103,7 +104,7 @@ function SignUp(){
     
             // If the login has been successfully performed, then redirect the user to the login page.
             if (response.status === 200) {
-                navigate('/login');
+                setShowAlert(true)
             }
             else if (response.status === 400) {
                 SetInvPs(LoginResult.invalidField);
@@ -118,9 +119,15 @@ function SignUp(){
           }
     } 
 
-
+    function AlertConfirm(res) {
+        setShowAlert(false)
+        navigate('/login');
+    }
     return(
         <div className='LoginContainer'>
+            {
+                showAlert && <Alert message="Success!" body="You have created an account successfully" type={Alerts.Confirm} result={AlertConfirm}></Alert>
+            }
             {loggedIn && <Navigate to="/homepage" />}
             <h1 className='Logo'>EBook-Shelf</h1>
             <div className="Background">

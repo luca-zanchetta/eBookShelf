@@ -9,10 +9,10 @@ import x from '../../Icons/x.png';
 import axios from 'axios';
 import { Screens } from '../Homepage';
 import { HomepageEndpoint } from '../Homepage';
+import Alert, { Alerts } from './Alert';
 
 const username = localStorage.getItem('LoggedUser');
 const buy = sessionStorage.getItem('buyBook');
-
 class BookPreview extends React.Component {
 
     constructor(props){
@@ -20,7 +20,8 @@ class BookPreview extends React.Component {
 
         this.state = {
             book: null,
-            CloseDialog: props.CloseWindow
+            CloseDialog: props.CloseWindow,
+            Alert:0
         }
 
     }
@@ -55,11 +56,7 @@ class BookPreview extends React.Component {
                 isbn,
               });
             
-            alert(response.data.message);
-            if(response.data.status === 200) {
-                sessionStorage.setItem('window', 'library');
-            }
-            window.location.replace(window.location.href);
+            this.UpdateAlertState(response.data.status)
           } 
           catch (error) {
             // Request failed
@@ -67,9 +64,34 @@ class BookPreview extends React.Component {
           }
     }
 
+    UpdateAlertState(status) {
+        this.setState({Alert:status})
+    }
+
+    PopUpConfirm = (result) => {
+        if(result === 200) {
+            sessionStorage.setItem('window', 'library');
+            window.location.replace(window.location.href);
+        }
+        
+        this.setState({Alert:0})
+    }
+
     render() {
         return(
             <>
+                {
+                    (this.state.Alert == 400 || this.state.Alert == 401) && <Alert message="Error!" body="Your account has insufficient funds to cover this transaction." type={Alerts.Confirm} result={this.PopUpConfirm}></Alert>
+                }
+                {
+                    this.state.Alert == 501 && <Alert message="Error!" body="An unexpected error occured during the transaction! Retry later." type={Alerts.Confirm} result={this.PopUpConfirm}></Alert>
+                }
+                {
+                    this.state.Alert == 200 && <Alert message="Success!" body="You have bought a new book! You will find the new book in your library." type={Alerts.Confirm} result={this.PopUpConfirm}></Alert>
+                } 
+                {
+                    this.state.Alert == 402 && <Alert message="Error!" body="You already own this book!" type={Alerts.Confirm} result={this.PopUpConfirm}></Alert>
+                }
                  {this.state.book != null &&
                     <div className="RightContainer">
                         <img src={x} id="xicon" onClick={this.state.CloseDialog}></img>
