@@ -626,7 +626,7 @@ def getSuggestedBooks():
             candidate_books.append(parse_json(book))
             if float(book['average_rating']) != 0:
                 book_ratios.append(float(book['ratings_count'])/float(book['average_rating']))
-        elif(book['ISBN'] in bought_books):     # I have already bought this book; I'm interested only in the category
+        elif(book['ISBN'] in bought_books and book['categories'] not in bought_categories):     # I have already bought this book; I'm interested only in the category
             bought_categories.append(book['categories'])
     
 
@@ -640,6 +640,8 @@ def getSuggestedBooks():
                         book_ratios.remove(max_ratio)
     
     else:    # I have bought at least one book: my suggestion is based on the ratio per bought category
+        print("CATEGORIES:")
+        print(bought_categories)
         for category in bought_categories:
             for book in getBooksByCategory(category):
                 book_categories.append(book)
@@ -686,7 +688,7 @@ def getSuggestedBooks():
         
 
         # 3+ categories bought: my suggestion will be the best 3 books of those categories only
-        elif len(bought_categories) == 3:
+        elif len(bought_categories) >= 3:
             while len(books) != 3:
                 max_ratio = max(book_categories_ratios)
                 for book in book_categories:

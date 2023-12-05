@@ -5,7 +5,7 @@ import books from '../../Icons/books.png';
 import del from '../../Icons/delete.png';
 import logout from '../../Icons/logout.png';
 import dashboard from '../../Icons/dashboard.png';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Screens } from '../Homepage';
@@ -25,7 +25,7 @@ function Navbar({OnNavigatorClick}) {
     const [balance,SetBalance] = useState(0)
     const navigate = useNavigate();
 
-    const show_data = async(event) => {
+    const show_data = useCallback(async(event) => {
         const response = await axios
         .get(endpointGetNameByUsername, {
             params: {
@@ -48,13 +48,13 @@ function Navbar({OnNavigatorClick}) {
         else if(response.data.status === 404) {
             console.log(response.data.message);
         }
-    }
+    }, [loggedIn]);
 
     const OnClick = event => {
         var display = 0
-        if(event.currentTarget.id == 'store')
+        if(event.currentTarget.id === 'store')
             display = Screens.Store
-        else if(event.currentTarget.id == 'library')
+        else if(event.currentTarget.id === 'library')
             display = Screens.Library
         else
             display = Screens.Dashboard
@@ -111,7 +111,7 @@ function Navbar({OnNavigatorClick}) {
             SetBalance(response.data.balance);
         })
         
-    }, []);
+    }, [loggedIn, show_data]);
 
     return(
         <div className='Container'>
@@ -122,7 +122,7 @@ function Navbar({OnNavigatorClick}) {
                 E-BookShelf
             </h1>
             <div className='ProfileContainer'>
-                <img src={profile}></img>
+                <img src={profile} alt=''></img>
                 <h2>
                     {name} {surname}
                 </h2>
@@ -137,23 +137,23 @@ function Navbar({OnNavigatorClick}) {
             <div className='ToggleMenu'>
             {/* =============== TOGGLE MENU ================== */}
                 <div className='ToggleEntry'>
-                    <input type='radio' id="store" name="menu" onClick={OnClick} defaultChecked = { Screens.Store == currentDisplay }></input>
+                    <input type='radio' id="store" name="menu" onClick={OnClick} defaultChecked = { Screens.Store === currentDisplay }></input>
                     <div className='ToggleIcon'>
-                        <img src={store}></img>
+                        <img src={store} alt=''></img>
                     </div>
                     <label for="store">Book store</label>
                 </div>
                 <div className='ToggleEntry'>
-                    <input type='radio' id="library" name="menu"onClick={OnClick} defaultChecked = { Screens.Library == currentDisplay }></input>
+                    <input type='radio' id="library" name="menu"onClick={OnClick} defaultChecked = { Screens.Library === currentDisplay }></input>
                     <div className='ToggleIcon'>
-                        <img src={books}></img>
+                        <img src={books} alt=''></img>
                     </div>
                     <label for="library">My Library</label>
                 </div>
                 <div className='ToggleEntry'>
-                    <input type='radio' id="dashboard" name="menu" onClick={OnClick} defaultChecked = { Screens.Dashboard == currentDisplay }></input>
+                    <input type='radio' id="dashboard" name="menu" onClick={OnClick} defaultChecked = { Screens.Dashboard === currentDisplay }></input>
                     <div className='ToggleIcon'>
-                        <img src={dashboard}></img>
+                        <img src={dashboard} alt=''></img>
                     </div>
                     <label for="dashboard">Dashboard</label>
                 </div>
@@ -164,14 +164,14 @@ function Navbar({OnNavigatorClick}) {
                 <div className='ToggleEntry' onClick={() => SetShow(true)}>
                     <input type='button' id="settings" name="settings"></input>
                     <div className='ToggleIcon'>
-                        <img src={del}></img>
+                        <img src={del} alt=''></img>
                     </div>
                     <label for="settings" style={{fontSize:'.95vw'}}>Delete Account</label>
                 </div>
                 <div className='ToggleEntry' onClick={handleLogout}>
                     <input type='button' id="logout" name="logout"></input>
                     <div className='ToggleIcon'>
-                        <img src={logout}></img>
+                        <img src={logout} alt=''></img>
                     </div>
                     <label for="logout">Logout</label>
                 </div>

@@ -74,7 +74,7 @@ function SignUp(){
             checkPassed = false
         }
 
-        if(copyPassword != password) {
+        if(copyPassword !== password) {
             SetInvCopyPs(LoginResult.wrongContent);
             SetInvPs(LoginResult.wrongContent);
             checkPassed = false
@@ -126,7 +126,7 @@ function SignUp(){
     return(
         <div className='LoginContainer'>
             {
-                showAlert && <Alert message="Success!" body="You have created an account successfully" type={Alerts.Confirm} result={AlertConfirm}></Alert>
+                showAlert && <Alert message="Success!" body="You have successfully created an account!" type={Alerts.Confirm} result={AlertConfirm}></Alert>
             }
             {loggedIn && <Navigate to="/homepage" />}
             <h1 className='Logo'>EBook-Shelf</h1>
@@ -197,9 +197,9 @@ function SignUp(){
                             <h4>
                                 <span id='showPassword' onClick={ToggleShow}>
                                     {
-                                        !showPs && <img src={show}></img>
+                                        (!showPs && <img src={show} alt=''></img>)
                                         ||
-                                        showPs && <img src={hide}></img>
+                                        (showPs && <img src={hide} alt=''></img>)
                                     }
                                 </span>
                                 show
@@ -212,8 +212,8 @@ function SignUp(){
                            ( invalidPs === LoginResult.correctField && <input type='password' id='password'></input>)
                         }
                         <div className='InputLabels'>
-                            {invalidPs === LoginResult.invalidField && <h4 className="invalidContentMessage">insert at least 8 characters!</h4>}
-                            {invalidPs === LoginResult.wrongContent &&<h4 className="invalidContentMessage">Passwords are diffrent!</h4>}
+                            {invalidPs === LoginResult.invalidField && <h4 className="invalidContentMessage">Insert at least 8 characters!</h4>}
+                            {invalidPs === LoginResult.wrongContent &&<h4 className="invalidContentMessage">Passwords are different!</h4>}
                         </div>
                     </div>
                     <div className='InputForms'>
@@ -224,9 +224,9 @@ function SignUp(){
                             <h4>
                                 <span id='showPassword' onClick={ToggleCopyShow}>
                                     {
-                                        !showCopyPs && <img src={show}></img>
+                                        (!showCopyPs && <img src={show} alt=''></img>)
                                         ||
-                                        showCopyPs && <img src={hide}></img>
+                                        (showCopyPs && <img src={hide} alt=''></img>)
                                     }
                                 </span>
                                 show
@@ -240,7 +240,7 @@ function SignUp(){
                         }
                         <div className='InputLabels'>
                             {invalidCopyPs === LoginResult.invalidField && <h4 className="invalidContentMessage">Invalid content!</h4>}
-                            {invalidCopyPs === LoginResult.wrongContent &&<h4 className="invalidContentMessage">Passwords are diffrent!</h4>}
+                            {invalidCopyPs === LoginResult.wrongContent &&<h4 className="invalidContentMessage">Passwords are different!</h4>}
                         </div>
                     </div>
                     <input type='button' value="Register"  onClick={SubmitLogin}></input>

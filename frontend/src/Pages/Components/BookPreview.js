@@ -1,18 +1,13 @@
 import React from 'react';
 import '../../Css/BookPreview-style.css'
 import '../../Css/star-vote.css'
-// import Box from '@mui/material/Box';
-// import Rating from '@mui/material/Rating';
-// import Typography from '@mui/material/Typography';
 import sample from '../../Icons/sample.jpg';
 import x from '../../Icons/x.png';
 import axios from 'axios';
-import { Screens } from '../Homepage';
 import { HomepageEndpoint } from '../Homepage';
 import Alert, { Alerts } from './Alert';
 
 const username = localStorage.getItem('LoggedUser');
-const buy = sessionStorage.getItem('buyBook');
 class BookPreview extends React.Component {
 
     constructor(props){
@@ -81,23 +76,23 @@ class BookPreview extends React.Component {
         return(
             <>
                 {
-                    (this.state.Alert == 400 || this.state.Alert == 401) && <Alert message="Error!" body="Your account has insufficient funds to cover this transaction." type={Alerts.Confirm} result={this.PopUpConfirm}></Alert>
+                    (this.state.Alert === 400 || this.state.Alert === 401) && <Alert message="Error!" body="Your account has insufficient funds to cover this transaction." type={Alerts.Confirm} result={this.PopUpConfirm}></Alert>
                 }
                 {
-                    this.state.Alert == 501 && <Alert message="Error!" body="An unexpected error occured during the transaction! Retry later." type={Alerts.Confirm} result={this.PopUpConfirm}></Alert>
+                    this.state.Alert === 501 && <Alert message="Error!" body="An unexpected error occured during the transaction! Retry later." type={Alerts.Confirm} result={this.PopUpConfirm}></Alert>
                 }
                 {
-                    this.state.Alert == 200 && <Alert message="Success!" body="You have bought a new book! You will find the new book in your library." type={Alerts.Confirm} result={this.PopUpConfirm}></Alert>
+                    this.state.Alert === 200 && <Alert message="Success!" body="You have bought a new book! You will find the new book in your library." type={Alerts.Confirm} result={this.PopUpConfirm}></Alert>
                 } 
                 {
-                    this.state.Alert == 402 && <Alert message="Error!" body="You already own this book!" type={Alerts.Confirm} result={this.PopUpConfirm}></Alert>
+                    this.state.Alert === 402 && <Alert message="Error!" body="You already own this book!" type={Alerts.Confirm} result={this.PopUpConfirm}></Alert>
                 }
                  {this.state.book != null &&
                     <div className="RightContainer">
-                        <img src={x} id="xicon" onClick={this.state.CloseDialog}></img>
+                        <img src={x} id="xicon" onClick={this.state.CloseDialog} alt=''></img>
                         <h2>Book details</h2>
                         {this.state.book != null && <>   
-                        <img src={this.state.book.URL == ""? sample:this.state.book.URL} id="book"></img>
+                        <img src={this.state.book.URL === ""? sample:this.state.book.URL} id="book" alt=''></img>
                         <div className="BookInfo">
                             <h3>{this.state.book.title}</h3>
                             <h5>{this.state.book.authors}</h5>

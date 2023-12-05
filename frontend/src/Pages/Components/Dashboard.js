@@ -189,6 +189,8 @@ function Dashboard() {
             }}
         ).then((response) => {
             if(response.data.status === 200 || response.data.status === 201) {
+                console.log(response.data.status)
+                console.log(response.data.books)
                 SetSuggBook(response.data.books);
             }
             else {
@@ -196,21 +198,21 @@ function Dashboard() {
             }
         })
 
-    }, []);
+    }, [username]);
     
     return(
         <div className="Dashboard">
                 {
-                    (buyAlert == 400 || buyAlert == 401) && <Alert message="Error!" body="Your account has insufficient funds to cover this transaction." type={Alerts.Confirm} result={(res) => setBuyAlert(0)}></Alert>
+                    (buyAlert === 400 || buyAlert === 401) && <Alert message="Error!" body="Your account has insufficient funds to cover this transaction." type={Alerts.Confirm} result={(res) => setBuyAlert(0)}></Alert>
                 }
                 {
-                    buyAlert == 501 && <Alert message="Error!" body="An unexpected error occured during the transaction! Retry later." type={Alerts.Confirm} result={(res) => setBuyAlert(0)}></Alert>
+                    buyAlert === 501 && <Alert message="Error!" body="An unexpected error occured during the transaction! Retry later." type={Alerts.Confirm} result={(res) => setBuyAlert(0)}></Alert>
                 }
                 {
-                    buyAlert == 200 && <Alert message="Success!" body="You have bought a new book! You will find the new book in your library." type={Alerts.Confirm} result={(res) => setBuyAlert(0)}></Alert>
+                    buyAlert === 200 && <Alert message="Success!" body="You have bought a new book! You will find the new book in your library." type={Alerts.Confirm} result={(res) => setBuyAlert(0)}></Alert>
                 } 
                 {
-                    buyAlert == 402 && <Alert message="Error!" body="You already own this book!" type={Alerts.Confirm} result={(res) => setBuyAlert(0)}></Alert>
+                    buyAlert === 402 && <Alert message="Error!" body="You already own this book!" type={Alerts.Confirm} result={(res) => setBuyAlert(0)}></Alert>
                 }
            <div className='DashboardTopBar'>
                 <h1>
@@ -225,7 +227,7 @@ function Dashboard() {
                             suggBook.map( (value) => {
                                 return(
                                     <div className='SuggestedBooksEntry'>
-                                        <img src={value.URL == ""? sample:value.URL} className="SuggestedBookImage"></img>
+                                        <img src={value.URL === ""? sample:value.URL} className="SuggestedBookImage" alt=''></img>
                                         <div className='SuggestedWrapper'>
                                             <div className='SuggestedBooksEntryText'>
                                                 <h3>{value.title}</h3>
@@ -252,13 +254,13 @@ function Dashboard() {
                             <h2 id="balance">{balance.toFixed(2)}$</h2>
                             <div className='Movements'>
                                 <div className='Movement'>
-                                    <img src={upArrow} id="entries"></img>
+                                    <img src={upArrow} id="entries" alt=''></img>
                                     <h3>
                                         {chargedMoney.toFixed(2)}$
                                     </h3>
                                 </div>
                                 <div className='Movement'>
-                                    <img src={downArrow} id="expenses"></img>
+                                    <img src={downArrow} id="expenses" alt=''></img>
                                     <h3>
                                         {expenses.toFixed(2)}$
                                     </h3>
@@ -287,7 +289,7 @@ function Dashboard() {
                         {transactions.length === 0 ? (
                             <h3 style={{marginTop: '10%'}}>You have no transaction yet.</h3>
                         ): (
-                            viewAll && sixTransactions.map((value) => {
+                            (viewAll && sixTransactions.map((value) => {
                                 return(
                                     <div className="TransactionHistoryEntry">
                                         {
@@ -302,9 +304,9 @@ function Dashboard() {
                                         } 
                                     </div>
                                 )
-                            })
+                            }))
                             ||
-                            !viewAll && transactions.map((value) => {
+                            (!viewAll && transactions.map((value) => {
                                 return(
                                     <div className="TransactionHistoryEntry">
                                         {
@@ -319,7 +321,7 @@ function Dashboard() {
                                         } 
                                     </div>
                                 )
-                            })
+                            }))
                         )}
                     </div>
                     <div className="ProfileRecap">
@@ -347,7 +349,7 @@ function Dashboard() {
                         <div className="Stats">
                             <div className="StatsEntry">
                                 <div className="StatsEntryImg">
-                                    <img src={book}></img>
+                                    <img src={book} alt=''></img>
                                 </div>
                                 <div className="StatsData">
                                     <h4>Read books</h4>
@@ -356,7 +358,7 @@ function Dashboard() {
                             </div>   
                             <div className="StatsEntry">
                                 <div className="StatsEntryImg">
-                                    <img src={book}></img>
+                                    <img src={book} alt=''></img>
                                 </div>
                                 <div className="StatsData">
                                     <h4>Different genres</h4>
